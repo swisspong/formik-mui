@@ -9,13 +9,8 @@ import {
 } from "@mui/material";
 import { useField, useFormikContext } from "formik";
 const SelectWrapper = ({ name, label, options, ...otherProps }) => {
-  const [age, setAge] = useState("");
-
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   const [field, meta] = useField(name);
-  const { setFieldValue } = useFormikContext();
+  const { setFieldValue, setValues } = useFormikContext();
   const onChange = (e) => {
     const { value } = e.target;
     setFieldValue(name, value);
