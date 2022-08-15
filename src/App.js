@@ -20,6 +20,7 @@ import * as Yup from "yup";
 
 import TextFieldWrapper from "./components/FormUi/TextFieldWrapper";
 import SwitchWrapper from "./components/FormUi/SwitchWrapper";
+import ImageWrapper from "./components/FormUi/ImageWrapper";
 function App() {
   const dropdownOptions = [
     { key: "Select a option", value: "" },
@@ -39,7 +40,7 @@ function App() {
                   manyRelate: false,
                   showImage: false,
                   name: "",
-                  itemList: [{ name: "" }],
+                  itemList: [{ id: 0, name: "" }],
                 },
               ],
             }
@@ -55,25 +56,21 @@ function App() {
   };
   const initialValues = {
     name: "",
-    availableStock: 0,
+    availableStock: 1,
     description: "",
     option: false,
     inventoryId: "",
-    optionList: [
-      {
-        manyRelate: true,
-        showImage: false,
-        name: "",
-        itemList: [{ name: "" }],
-      },
-    ],
   };
   const validationSchema = Yup.object({
     name: Yup.string().required(),
-    availableStock: Yup.number().min(0),
+    availableStock: Yup.number().min(1),
     description: Yup.string().required(),
-    inventoryId: Yup.string().required(),
-    image: [],
+    // inventoryId: Yup.string().required(),
+    option: Yup.boolean(),
+    inventoryId: Yup.string().when("option", {
+      is: false,
+      then: Yup.string().required(),
+    }),
     optionList: Yup.array()
       .of(Yup.object({ name: Yup.string().required() }))
       .min(1),
@@ -88,8 +85,8 @@ function App() {
           onSubmit={onSubmit}
         >
           {(formik) => {
-            console.log(formik.values);
-            // console.log("Formik error", formik.errors);
+            // console.log(formik.values);
+            console.log("Formik error", formik.errors);
             return (
               <Form>
                 <TextFieldWrapper
@@ -98,15 +95,17 @@ function App() {
                   fullWidth
                 />
                 <TextFieldWrapper
+                  name={"availableStock"}
+                  label={"Available Stock"}
+                  type={"number"}
+                  fullWidth
+                />
+                <TextFieldWrapper
                   name={"description"}
                   label={"Description"}
                   fullWidth
                 />
-                <SelectWrapper
-                  name={"selectTest"}
-                  label={"Select a topic"}
-                  options={dropdownOptions}
-                />
+                <ImageWrapper />
 
                 <SwitchWrapper
                   name={"option"}
@@ -127,18 +126,23 @@ function App() {
                                   name={`optionList.${index}.manyRelate`}
                                   label={"Many Relate"}
                                 />
+                                <SwitchWrapper
+                                  name={`optionList.${index}.showImage`}
+                                  label={"Show Image"}
+                                />
                                 <TextFieldWrapper
                                   name={`optionList.${index}.name`}
                                   label={`Name of option ${index + 1}`}
                                   fullWidth
                                 />
-                                <Box p={2}>
+                                <Box m={2} p={2} border={1}></Box>
+                                {/* <Box p={2}>
                                   <SelectWrapper
                                     name={"selectTest"}
                                     label={"Select a topic"}
                                     options={dropdownOptions}
                                   />
-                                </Box>
+                                </Box> */}
                                 <Box ml={1}>
                                   <ButtonGroup variant="contained">
                                     <Button
