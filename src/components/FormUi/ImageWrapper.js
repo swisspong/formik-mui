@@ -1,6 +1,7 @@
 import { Box, Button, FormControl, FormHelperText } from "@mui/material";
 import { useField, useFormikContext, getIn } from "formik";
 import React from "react";
+import PhotoIcon from '@mui/icons-material/Photo';
 import PreviewImage from "./PreviewImage";
 
 const ImageWrapper = ({ name, label, multiple, ...otherProps }) => {
@@ -15,12 +16,14 @@ const ImageWrapper = ({ name, label, multiple, ...otherProps }) => {
       setFieldValue(name, e.target.files[0]);
     }
   };
-  
+
   return (
     <Box
       display={"flex"}
       sx={{
-        m: 1,
+        // m: 1,
+        mx: 1,
+        my: 2,
       }}
     >
       <FormControl
@@ -37,6 +40,8 @@ const ImageWrapper = ({ name, label, multiple, ...otherProps }) => {
             border: "2px dashed grey",
             // borderColor: "error.main",
             borderColor: "grey.500",
+            borderRadius: 1,
+            bgcolor: "grey.50",
           }}
         >
           <Box
@@ -62,7 +67,7 @@ const ImageWrapper = ({ name, label, multiple, ...otherProps }) => {
               display={"flex"}
               justifyContent={"center"}
             >
-              <Button variant="contained" component="label">
+              <Button variant="contained" component="label" startIcon={<PhotoIcon/>}>
                 {label}
                 <input
                   hidden

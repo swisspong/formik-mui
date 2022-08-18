@@ -12,26 +12,36 @@ import React from "react";
 
 const Sidebar = () => {
   return (
-    <Box flex={1} p={2} borderRight={1} borderColor="grey.300" width={1} display={"block"} >
-      <Box position={"fixed"}width={1} >
-        <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <HomeIcon />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                <InventoryIcon />
-              </ListItemIcon>
-              <ListItemText primary="Inventory" />
-            </ListItemButton>
-          </ListItem>
-        </List>
+    <Box
+      position={"relative"}
+      flex={1}
+      p={2}
+      borderRight={1}
+      borderColor="grey.300"
+      width={1}
+      display={"block"}
+    >
+        <Box bgcolor={"red"}>
+          <List>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <HomeIcon />
+                </ListItemIcon>
+                <ListItemText primary="Home" />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemIcon>
+                  <InventoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="Inventory" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+      <Box>
       </Box>
     </Box>
   );

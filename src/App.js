@@ -31,6 +31,7 @@ import PreviewImage from "./components/FormUi/PreviewImage";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Rightbar from "./components/Rightbar";
+import ResponsiveDrawer from "./components/ResponsiveDrawer";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -117,17 +118,12 @@ function App() {
   const onSubmit = (values) => console.log("formik values", values);
   return (
     <>
-      <Navbar />
-      <Box height="100%">
+      <ResponsiveDrawer />
+      {/* <Navbar /> */}
+      {/* <Box height="100%">
         <Stack direction={"row"} spacing={2} height="100%">
           <Sidebar />
-          {/* <Rightbar/> */}
-          <Box
-            // bgcolor={"skyblue"}
-            flex={5}
-            p={2}
-            pr={5}
-          >
+          <Box flex={5} p={2} pr={5}>
             <Breadcrumbs
               separator={<NavigateNextIcon fontSize="small" />}
               aria-label="breadcrumb"
@@ -135,7 +131,7 @@ function App() {
             >
               {breadcrumbs}
             </Breadcrumbs>
-            <Paper sx={{p:2}}>
+            <Paper sx={{ p: 2 }}>
               <Formik
                 initialValues={initialValues}
                 validationSchema={validationSchema}
@@ -198,13 +194,7 @@ function App() {
                                           fullWidth
                                         />
                                         <Box m={2} p={2} border={1}></Box>
-                                        {/* <Box p={2}>
-                                  <SelectWrapper
-                                    name={"selectTest"}
-                                    label={"Select a topic"}
-                                    options={dropdownOptions}
-                                  />
-                                </Box> */}
+
                                         <Box ml={1}>
                                           <ButtonGroup variant="contained">
                                             <Button
@@ -266,127 +256,7 @@ function App() {
             </Paper>
           </Box>
         </Stack>
-        {/* <Grid container justifyContent={"center"}>
-        <Grid item xs={6}>
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={onSubmit}
-          >
-            {(formik) => {
-              // console.log(formik.values);
-              console.log("Formik error", formik.errors);
-              return (
-                <Form>
-                  <TextFieldWrapper
-                    name={"name"}
-                    label={"Name of product"}
-                    fullWidth
-                  />
-                  <TextFieldWrapper
-                    name={"availableStock"}
-                    label={"Available Stock"}
-                    type={"number"}
-                    fullWidth
-                  />
-                  <TextFieldWrapper
-                    name={"description"}
-                    label={"Description"}
-                    fullWidth
-                  />
-                  <ImageWrapper
-                    label={"upload image(s)"}
-                    name={"file"}
-                    multiple
-                  />
-
-                  <SwitchWrapper
-                    name={"option"}
-                    label={"option"}
-                    changeHandler={switchOptionHandler}
-                  />
-                  {formik.values.option ? (
-                    <Box p={2} border={1}>
-                      <FieldArray
-                        name="optionList"
-                        render={(arrayHelpers) => (
-                          <div>
-                            {formik.values.optionList &&
-                            formik.values.optionList.length > 0 ? (
-                              formik.values.optionList.map((option, index) => (
-                                <div key={index}>
-                                  <SwitchWrapper
-                                    name={`optionList.${index}.manyRelate`}
-                                    label={"Many Relate"}
-                                  />
-                                  <SwitchWrapper
-                                    name={`optionList.${index}.showImage`}
-                                    label={"Show Image"}
-                                  />
-                                  <TextFieldWrapper
-                                    name={`optionList.${index}.name`}
-                                    label={`Name of option ${index + 1}`}
-                                    fullWidth
-                                  />
-                                  <Box m={2} p={2} border={1}></Box>
-                             
-                                  <Box ml={1}>
-                                    <ButtonGroup variant="contained">
-                                      <Button
-                                        onClick={() =>
-                                          arrayHelpers.remove(index)
-                                        }
-                                        disabled={
-                                          formik.values.optionList.length <= 1
-                                        }
-                                      >
-                                        -
-                                      </Button>
-                                      <Button
-                                        onClick={() =>
-                                          arrayHelpers.insert(index, {
-                                            name: "",
-                                          })
-                                        }
-                                      >
-                                        +
-                                      </Button>
-                                    </ButtonGroup>
-                                  </Box>
-                                </div>
-                              ))
-                            ) : (
-                              <Button
-                                type="button"
-                                variant="contained"
-                                onClick={() => arrayHelpers.push({ name: "" })}
-                              >
-                                Add a Option Group
-                              </Button>
-                            )}
-                          </div>
-                        )}
-                      />
-                    </Box>
-                  ) : (
-                    <SelectWrapper
-                      name={"inventoryId"}
-                      label={"Select a topic"}
-                      options={dropdownOptions}
-                    />
-                  )}
-                  <Box m={1}>
-                    <Button type="submit" variant="contained">
-                      Submit
-                    </Button>
-                  </Box>
-                </Form>
-              );
-            }}
-          </Formik>
-        </Grid>
-      </Grid> */}
-      </Box>
+      </Box> */}
     </>
   );
 }

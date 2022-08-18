@@ -22,7 +22,7 @@ const SwitchWrapper = ({ name, label, changeHandler, ...otherProps }) => {
     onChange: handleChange,
   };
   return (
-    <FormControlLabel control={<Switch {...selectProps} />} label={label} />
+    <FormControlLabel sx={{mx:1}}  control={<Switch {...selectProps} />} label={label} />
   );
 };
 

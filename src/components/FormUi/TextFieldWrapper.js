@@ -22,7 +22,7 @@ const TextFieldWrapper = ({ name, ...otherProps }) => {
     textFieldProps.helperText = meta.error;
   }
   return (
-    <Box m={1} >
+    <Box mx={1} my={2}>
       <TextField {...textFieldProps} name={name} />
     </Box>
   );

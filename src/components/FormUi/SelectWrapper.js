@@ -24,7 +24,7 @@ const SelectWrapper = ({ name, label, options, ...otherProps }) => {
     onChange: onChange,
   };
   return (
-    <Box m={1}>
+    <Box mx={1} my={2}>
       <FormControl
         sx={{ minWidth: 120 }}
         fullWidth
