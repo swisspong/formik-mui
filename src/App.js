@@ -32,6 +32,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Rightbar from "./components/Rightbar";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
+import SignIn from "./components/SignIn";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -119,6 +120,7 @@ function App() {
   return (
     <>
       <ResponsiveDrawer />
+      {/* <SignIn/> */}
       {/* <Navbar /> */}
       {/* <Box height="100%">
         <Stack direction={"row"} spacing={2} height="100%">

@@ -74,12 +74,14 @@ const FormProduct = () => {
           return (
             <Form>
               <FormikControl
+             
                 control={"input"}
                 name={"name"}
                 label={"Name of product"}
                 fullWidth
               />
               <FormikControl
+           
                 control={"input"}
                 name={"availableStock"}
                 label={"Available Stock"}
@@ -87,6 +89,7 @@ const FormProduct = () => {
                 fullWidth
               />
               <FormikControl
+            
                 control={"input"}
                 name={"description"}
                 label={"Description"}
