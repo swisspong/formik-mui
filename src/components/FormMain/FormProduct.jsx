@@ -116,6 +116,12 @@ const FormProduct = () => {
                 label={"option"}
                 changeHandler={switchOptionHandler}
               />
+              <FormikControl
+                control={"switch"}
+                name={"option"}
+                label={"Relate with Inventory"}
+                changeHandler={switchOptionHandler}
+              />
               {/* <SwitchWrapper
                 name={"option"}
                 label={"option"}
