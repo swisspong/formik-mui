@@ -32,6 +32,7 @@ import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import Rightbar from "./components/Rightbar";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
+import { Routes, Route, BrowserRouter } from "react-router-dom";
 import SignIn from "./components/SignIn";
 function App() {
   function handleClick(event) {
@@ -118,8 +119,12 @@ function App() {
   });
   const onSubmit = (values) => console.log("formik values", values);
   return (
-    <>
-      <ResponsiveDrawer />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<SignIn />} />
+      </Routes>
+      {/* <ResponsiveDrawer /> */}
+
       {/* <SignIn/> */}
       {/* <Navbar /> */}
       {/* <Box height="100%">
@@ -259,7 +264,7 @@ function App() {
           </Box>
         </Stack>
       </Box> */}
-    </>
+    </BrowserRouter>
   );
 }
 

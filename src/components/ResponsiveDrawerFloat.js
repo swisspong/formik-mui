@@ -16,26 +16,14 @@ import MailIcon from "@mui/icons-material/Mail";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import CategoryIcon from "@mui/icons-material/Category";
-import InventoryIcon from "@mui/icons-material/Inventory";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
-import {
-  Avatar,
-  Breadcrumbs,
-  Button,
-  Link,
-  Menu,
-  MenuItem,
-  Tooltip,
-} from "@mui/material";
+import { Avatar, Breadcrumbs, Button, Link, Menu, MenuItem, Tooltip } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import FormProduct from "./FormMain/FormProduct";
 import { Stack } from "@mui/system";
 import AdbIcon from "@mui/icons-material/Adb";
 
 const drawerWidth = 240;
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 function ResponsiveDrawer(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -82,18 +70,16 @@ function ResponsiveDrawer(props) {
       <Toolbar />
       <Divider />
       <List>
-        {["Dashboard", "Category", "Inventory", "Product"].map(
-          (text, index) => (
-            <ListItem key={text} disablePadding>
-              <ListItemButton>
-                <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItemButton>
-            </ListItem>
-          )
-        )}
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
+          <ListItem key={text} disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
+              <ListItemText primary={text} />
+            </ListItemButton>
+          </ListItem>
+        ))}
       </List>
       <Divider />
       <List>
@@ -120,9 +106,8 @@ function ResponsiveDrawer(props) {
       <AppBar
         position="fixed"
         sx={{
-          // width: { sm: `calc(100% - ${drawerWidth}px)` },
-          // ml: { sm: `${drawerWidth}px` },
-          zIndex: (theme) => theme.zIndex.drawer + 1,
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
         }}
       >
         <Toolbar>
@@ -175,22 +160,25 @@ function ResponsiveDrawer(props) {
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}></Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <IconButton
+                onClick={handleOpenUserMenu}
+                sx={{ p: 0 }}
+              >
                 <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: '45px' }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               keepMounted
               transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
+                vertical: 'top',
+                horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
