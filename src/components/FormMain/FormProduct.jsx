@@ -3,6 +3,7 @@ import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import FormikControl from "../FormUi/FormikControl";
+import HeadingCrud from "../HeadingCrud";
 
 const FormProduct = () => {
   const dropdownOptions = [
@@ -62,171 +63,173 @@ const FormProduct = () => {
   });
   const onSubmit = (values) => console.log("formik values", values);
   return (
-    <Paper sx={{ p: 2 }}>
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={onSubmit}
-      >
-        {(formik) => {
-          // console.log(formik.values);
-          console.log("Formik error", formik.errors);
-          return (
-            <Form>
-              <FormikControl
-             
-                control={"input"}
-                name={"name"}
-                label={"Name of product"}
-                fullWidth
-              />
-              <FormikControl
-           
-                control={"input"}
-                name={"availableStock"}
-                label={"Available Stock"}
-                type={"number"}
-                fullWidth
-              />
-              <FormikControl
-            
-                control={"input"}
-                name={"description"}
-                label={"Description"}
-                fullWidth
-                multiline
-                rows={4}
+    <>
+      <HeadingCrud label={"Create new product"} backTo={-1} />
+      <Paper sx={{ p: 2 }}>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={onSubmit}
+        >
+          {(formik) => {
+            // console.log(formik.values);
 
-                // InputProps={{
-                //   startAdornment: (
-                //     <InputAdornment position="start">฿</InputAdornment>
-                //   ),
-                // }}
-              />
-              <FormikControl
-                control={"image"}
-                label={"upload image(s)"}
-                name={"file"}
-                multiple
-              />
-              {/* <ImageWrapper label={"upload image(s)"} name={"file"} multiple /> */}
-              <FormikControl
-                control={"switch"}
-                name={"option"}
-                label={"option"}
-                changeHandler={switchOptionHandler}
-              />
-              <FormikControl
-                control={"switch"}
-                name={"option"}
-                label={"Relate with Inventory"}
-                changeHandler={switchOptionHandler}
-              />
-              {/* <SwitchWrapper
+            return (
+              <Form>
+                <FormikControl
+                  control={"input"}
+                  name={"name"}
+                  label={"Name of product"}
+                  fullWidth
+                />
+                <FormikControl
+                  control={"input"}
+                  name={"availableStock"}
+                  label={"Available Stock"}
+                  type={"number"}
+                  fullWidth
+                />
+                <FormikControl
+                  control={"input"}
+                  name={"description"}
+                  label={"Description"}
+                  fullWidth
+                  multiline
+                  rows={4}
+
+                  // InputProps={{
+                  //   startAdornment: (
+                  //     <InputAdornment position="start">฿</InputAdornment>
+                  //   ),
+                  // }}
+                />
+                <FormikControl
+                  control={"image"}
+                  label={"upload image(s)"}
+                  name={"file"}
+                  multiple
+                />
+                {/* <ImageWrapper label={"upload image(s)"} name={"file"} multiple /> */}
+                <FormikControl
+                  control={"switch"}
+                  name={"option"}
+                  label={"option"}
+                  changeHandler={switchOptionHandler}
+                />
+                <FormikControl
+                  control={"switch"}
+                  name={"option"}
+                  label={"Relate with Inventory"}
+                  changeHandler={switchOptionHandler}
+                />
+                {/* <SwitchWrapper
                 name={"option"}
                 label={"option"}
                 changeHandler={switchOptionHandler}
               /> */}
-              {formik.values.option ? (
-                <Box
-                  mx={1}
-                  my={2}
-                  p={2}
-                  border={1}
-                  borderRadius={1}
-                  borderColor={"grey.500"}
-                >
-                  <FieldArray
-                    name="optionList"
-                    render={(arrayHelpers) => (
-                      <div>
-                        {formik.values.optionList &&
-                        formik.values.optionList.length > 0 ? (
-                          formik.values.optionList.map((option, index) => (
-                            <div key={index}>
-                              <Box
-                                mx={1}
-                                my={2}
-                                p={2}
-                                border={1}
-                                borderRadius={1}
-                                borderColor={"grey.500"}
-                              >
-                                <FormikControl
-                                  control={"switch"}
-                                  name={`optionList.${index}.manyRelate`}
-                                  label={"Many Relate"}
-                                />
+                {formik.values.option ? (
+                  <Box
+                    mx={1}
+                    my={2}
+                    p={2}
+                    border={1}
+                    borderRadius={1}
+                    borderColor={"grey.500"}
+                  >
+                    <FieldArray
+                      name="optionList"
+                      render={(arrayHelpers) => (
+                        <div>
+                          {formik.values.optionList &&
+                          formik.values.optionList.length > 0 ? (
+                            formik.values.optionList.map((option, index) => (
+                              <div key={index}>
+                                <Box
+                                  mx={1}
+                                  my={2}
+                                  p={2}
+                                  border={1}
+                                  borderRadius={1}
+                                  borderColor={"grey.500"}
+                                >
+                                  <FormikControl
+                                    control={"switch"}
+                                    name={`optionList.${index}.manyRelate`}
+                                    label={"Many Relate"}
+                                  />
 
-                                <FormikControl
-                                  control={"switch"}
-                                  name={`optionList.${index}.showImage`}
-                                  label={"Show Image"}
-                                />
-                                <FormikControl
-                                  control={"input"}
-                                  name={`optionList.${index}.name`}
-                                  label={`Name of option ${index + 1}`}
-                                  fullWidth
-                                />
+                                  <FormikControl
+                                    control={"switch"}
+                                    name={`optionList.${index}.showImage`}
+                                    label={"Show Image"}
+                                  />
+                                  <FormikControl
+                                    control={"input"}
+                                    name={`optionList.${index}.name`}
+                                    label={`Name of option ${index + 1}`}
+                                    fullWidth
+                                  />
 
-                                <Box m={2} p={2} border={1}></Box>
+                                  <Box m={2} p={2} border={1}></Box>
 
-                                <Box ml={1}>
-                                  <ButtonGroup variant="contained">
-                                    <Button
-                                      onClick={() => arrayHelpers.remove(index)}
-                                      disabled={
-                                        formik.values.optionList.length <= 1
-                                      }
-                                    >
-                                      -
-                                    </Button>
-                                    <Button
-                                      onClick={() =>
-                                        arrayHelpers.insert(index, {
-                                          name: "",
-                                        })
-                                      }
-                                    >
-                                      +
-                                    </Button>
-                                  </ButtonGroup>
+                                  <Box ml={1}>
+                                    <ButtonGroup variant="contained">
+                                      <Button
+                                        onClick={() =>
+                                          arrayHelpers.remove(index)
+                                        }
+                                        disabled={
+                                          formik.values.optionList.length <= 1
+                                        }
+                                      >
+                                        -
+                                      </Button>
+                                      <Button
+                                        onClick={() =>
+                                          arrayHelpers.insert(index, {
+                                            name: "",
+                                          })
+                                        }
+                                      >
+                                        +
+                                      </Button>
+                                    </ButtonGroup>
+                                  </Box>
                                 </Box>
-                              </Box>
-                            </div>
-                          ))
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="contained"
-                            onClick={() => arrayHelpers.push({ name: "" })}
-                          >
-                            Add a Option Group
-                          </Button>
-                        )}
-                      </div>
-                    )}
+                              </div>
+                            ))
+                          ) : (
+                            <Button
+                              type="button"
+                              variant="contained"
+                              onClick={() => arrayHelpers.push({ name: "" })}
+                            >
+                              Add a Option Group
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    />
+                  </Box>
+                ) : (
+                  <FormikControl
+                    control={"select"}
+                    name={"inventoryId"}
+                    label={"Select a topic"}
+                    options={dropdownOptions}
                   />
+                )}
+                <Box m={1}>
+                  <Button type="submit" variant="contained">
+                    Submit
+                  </Button>
                 </Box>
-              ) : (
-                <FormikControl
-                  control={"select"}
-                  name={"inventoryId"}
-                  label={"Select a topic"}
-                  options={dropdownOptions}
-                />
-              )}
-              <Box m={1}>
-                <Button type="submit" variant="contained">
-                  Submit
-                </Button>
-              </Box>
-            </Form>
-          );
-        }}
-      </Formik>
-    </Paper>
+              </Form>
+            );
+          }}
+        </Formik>
+      </Paper>
+    </>
   );
 };
 

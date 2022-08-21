@@ -34,6 +34,13 @@ import Rightbar from "./components/Rightbar";
 import ResponsiveDrawer from "./components/ResponsiveDrawer";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import SignIn from "./components/SignIn";
+import Layout from "./components/Layout";
+import FormProduct from "./components/FormMain/FormProduct";
+import FormCategory from "./components/FormMain/FormCategory";
+import FormInventory from "./components/FormMain/FormInventory";
+import CategoryTable from "./components/TableMain/CategoryTable";
+import InventoryTable from "./components/TableMain/InventoryTable";
+import ProductTable from "./components/TableMain/ProductTable";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -122,6 +129,20 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<SignIn />} />
+        <Route path="/" element={<Layout />}>
+          <Route path="category">
+            <Route index element={<CategoryTable />} />
+            <Route path="create" element={<FormCategory />} />
+          </Route>
+          <Route path="inventory">
+                 <Route index element={<InventoryTable />} />
+            <Route path="create" element={<FormInventory />} />
+          </Route>
+          <Route path="product">
+          <Route index element={<ProductTable />} />
+            <Route path="create" element={<FormProduct />} />
+          </Route>
+        </Route>
       </Routes>
       {/* <ResponsiveDrawer /> */}
 

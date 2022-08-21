@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import React from "react";
+import { swalLoadingNew } from "../utils/sweetAlertUtil";
 
 const SignIn = () => {
   const [open, setOpen] = React.useState(false);
@@ -27,7 +28,8 @@ const SignIn = () => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
-    handleToggle()
+    handleToggle();
+    swalLoadingNew()
     const data = new FormData(event.currentTarget);
     console.log({
       email: data.get("email"),
@@ -107,13 +109,13 @@ const SignIn = () => {
           </Box>
         </Paper>
       </Container>
-      <Backdrop
+      {/* <Backdrop
         sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
         onClick={handleClose}
       >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+        <CircularProgress />
+      </Backdrop> */}
     </>
   );
 };
