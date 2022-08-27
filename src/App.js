@@ -41,6 +41,8 @@ import FormInventory from "./components/FormMain/FormInventory";
 import CategoryTable from "./components/TableMain/CategoryTable";
 import InventoryTable from "./components/TableMain/InventoryTable";
 import ProductTable from "./components/TableMain/ProductTable";
+import FormProduct2 from "./components/FormMain/FormProduct2";
+import FormVariant from "./components/FormMain/FormVariant";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -135,12 +137,16 @@ function App() {
             <Route path="create" element={<FormCategory />} />
           </Route>
           <Route path="inventory">
-                 <Route index element={<InventoryTable />} />
+            <Route index element={<InventoryTable />} />
             <Route path="create" element={<FormInventory />} />
           </Route>
           <Route path="product">
-          <Route index element={<ProductTable />} />
-            <Route path="create" element={<FormProduct />} />
+            <Route index element={<ProductTable />} />
+            <Route path="create" element={<FormProduct2 />} />
+            <Route path="edit/:id">
+              <Route index element={<FormProduct2 edit={true} />} />
+              <Route path="variant" element={<FormVariant />} />
+            </Route>
           </Route>
         </Route>
       </Routes>

@@ -1,7 +1,13 @@
 import React from "react";
 import { FormControlLabel, Switch } from "@mui/material";
 import { getIn, useField, useFormikContext } from "formik";
-const SwitchWrapper = ({ name, label, changeHandler, ...otherProps }) => {
+const SwitchWrapper = ({
+  index = null,
+  name,
+  label,
+  changeHandler,
+  ...otherProps
+}) => {
   const [field] = useField(name);
   const { setFieldValue, setValues, values } = useFormikContext();
 
@@ -9,7 +15,7 @@ const SwitchWrapper = ({ name, label, changeHandler, ...otherProps }) => {
     const { checked } = event.target;
     if (changeHandler) {
       // setValues(() => ({ ...values, option: checked }));
-      changeHandler(setValues, values);
+      changeHandler(setValues, values,index);
     } else {
       setFieldValue(name, checked);
     }
@@ -22,7 +28,11 @@ const SwitchWrapper = ({ name, label, changeHandler, ...otherProps }) => {
     onChange: handleChange,
   };
   return (
-    <FormControlLabel sx={{mx:1}}  control={<Switch {...selectProps} />} label={label} />
+    <FormControlLabel
+      sx={{ mx: 1 }}
+      control={<Switch {...selectProps} />}
+      label={label}
+    />
   );
 };
 

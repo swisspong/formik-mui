@@ -65,17 +65,18 @@ const FormProduct = () => {
   return (
     <>
       <HeadingCrud label={"Create new product"} backTo={-1} />
-      <Paper sx={{ p: 2 }}>
-        <Formik
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          onSubmit={onSubmit}
-        >
-          {(formik) => {
-            // console.log(formik.values);
+      {/* <Paper sx={{ p: 2 }} elevation={3}> */}
+      <Formik
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={onSubmit}
+      >
+        {(formik) => {
+          // console.log(formik.values);
 
-            return (
-              <Form>
+          return (
+            <Form>
+              <Paper sx={{ p: 2,mb:3 }} elevation={3}>
                 <FormikControl
                   control={"input"}
                   name={"name"}
@@ -122,11 +123,7 @@ const FormProduct = () => {
                   label={"Relate with Inventory"}
                   changeHandler={switchOptionHandler}
                 />
-                {/* <SwitchWrapper
-                name={"option"}
-                label={"option"}
-                changeHandler={switchOptionHandler}
-              /> */}
+
                 {formik.values.option ? (
                   <Box
                     mx={1}
@@ -219,16 +216,22 @@ const FormProduct = () => {
                     options={dropdownOptions}
                   />
                 )}
+              </Paper>
+              <Paper sx={{ p: 2,mb:3 }} elevation={3}>
+                
+              </Paper>
+              <Paper sx={{ p: 2,mb:3 }} elevation={3}>
                 <Box m={1}>
-                  <Button type="submit" variant="contained">
+                  <Button fullWidth type="submit" variant="contained">
                     Submit
                   </Button>
                 </Box>
-              </Form>
-            );
-          }}
-        </Formik>
-      </Paper>
+              </Paper>
+            </Form>
+          );
+        }}
+      </Formik>
+      {/* </Paper> */}
     </>
   );
 };
