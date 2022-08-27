@@ -54,15 +54,14 @@ const FormVariant = () => {
   return (
     <>
       <HeadingCrud label={"Manage variants"} backTo={-1} />
-      {/* <Paper sx={{ p: 2 }} elevation={3}> */}
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
         {(formik) => {
-          // console.log(formik.values);
-
+  
           return (
             <Form>
               <Paper sx={{ p: 2, mb: 3 }} elevation={3}>
@@ -102,44 +101,6 @@ const FormVariant = () => {
                                 label={`Name of variant ${index + 1}`}
                                 fullWidth
                               />
-                              {/* 
-                              {formik.values.variants[index].manyRelate ? (
-                                <FieldArray
-                                  name={`variants.${index}.options`}
-                                  render={(arrayHelpers) => (
-                                    <div>
-                                      <Box
-                                        mx={1}
-                                        my={2}
-                                        p={2}
-                                        border={1}
-                                        borderRadius={1}
-                                        borderColor={"grey.500"}
-                                      ></Box>
-                                      <Button
-                                        sx={{ ml: 1, mb: 1 }}
-                                        type="button"
-                                        variant="contained"
-                                        onClick={() =>
-                                          arrayHelpers.push({
-                                            name: "",
-                                            price: 0,
-                                          })
-                                        }
-                                      >
-                                        Add a Option
-                                      </Button>
-                                    </div>
-                                  )}
-                                />
-                              ) : (
-                                <FormikControl
-                                  control={"select"}
-                                  name={"inventoryId"}
-                                  label={"Select a default option"}
-                                  options={dropdownOptions}
-                                />
-                              )} */}
 
                               <FieldArray
                                 name={`variants.${index}.options`}
@@ -158,8 +119,8 @@ const FormVariant = () => {
                                             borderRadius={1}
                                             borderColor={"grey.500"}
                                           >
-                                            <Grid container spacing={2}>
-                                              <Grid item xs={6} sm={4}>
+                                            <Grid container spacing={0}>
+                                              <Grid item xs={6}>
                                                 <FormikControl
                                                   control={"input"}
                                                   name={`variants.${index}.options.${index2}.name`}
@@ -169,7 +130,7 @@ const FormVariant = () => {
                                                   fullWidth
                                                 />
                                               </Grid>
-                                              <Grid item xs={6} sm={4}>
+                                              <Grid item xs={6}>
                                                 <FormikControl
                                                   control={"input"}
                                                   name={`variants.${index}.options.${index2}.price`}
@@ -180,8 +141,7 @@ const FormVariant = () => {
                                                   fullWidth
                                                 />
                                               </Grid>
-                                              <Grid item xs={4}>
-                                                {" "}
+                                              <Grid item xs={12}>
                                                 <FormikControl
                                                   control={"select"}
                                                   name={`variants.${index}.options.${index2}.inventoryId`}
@@ -191,39 +151,38 @@ const FormVariant = () => {
                                                   options={dropdownOptions}
                                                 />
                                               </Grid>
-                                              <Grid item xs={8}></Grid>
                                             </Grid>
-                                            <Box display={"flex"}>
-                                              <Box flexGrow={1}>
-                                                <FormikControl
-                                                  control={"input"}
-                                                  name={`variants.${index}.options.${index2}.name`}
-                                                  label={`Option name ${
-                                                    index2 + 1
-                                                  }`}
-                                                  fullWidth
-                                                />
-                                              </Box>
-                                              <Box flexGrow={1}>
-                                                <FormikControl
-                                                  control={"input"}
-                                                  name={`variants.${index}.options.${index2}.price`}
-                                                  label={`Option name ${
-                                                    index2 + 1
-                                                  }`}
-                                                  type="number"
-                                                  fullWidth
-                                                />
-                                              </Box>
+
+                                            <Box ml={1}>
+                                              <ButtonGroup variant="contained">
+                                                <Button
+                                                  onClick={() =>
+                                                    arrayHelpers.remove(index2)
+                                                  }
+                                                  disabled={
+                                                    formik.values.variants[
+                                                      index
+                                                    ].options.length <= 1
+                                                  }
+                                                >
+                                                  -
+                                                </Button>
+                                                <Button
+                                                  onClick={() =>
+                                                    arrayHelpers.insert(
+                                                      index2,
+                                                      {
+                                                        name: "",
+                                                        price: 0,
+                                                        inventoryId: "",
+                                                      }
+                                                    )
+                                                  }
+                                                >
+                                                  +
+                                                </Button>
+                                              </ButtonGroup>
                                             </Box>
-                                            <FormikControl
-                                              control={"select"}
-                                              name={`variants.${index}.options.${index2}.inventoryId`}
-                                              label={
-                                                "Select a product from inventory"
-                                              }
-                                              options={dropdownOptions}
-                                            />
                                           </Box>
                                         )
                                       )
@@ -281,7 +240,9 @@ const FormVariant = () => {
                               manyRelate: false,
                               name: "",
                               defaultOption: "",
-                              options: [],
+                              options: [
+                                { name: "", price: 0, inventoryId: "" },
+                              ],
                             })
                           }
                         >
@@ -292,7 +253,6 @@ const FormVariant = () => {
                   )}
                 />
               </Paper>
-
               <Paper sx={{ p: 2, mb: 3 }} elevation={3}>
                 <Box m={1}>
                   <Button fullWidth type="submit" variant="contained">
@@ -304,7 +264,6 @@ const FormVariant = () => {
           );
         }}
       </Formik>
-      {/* </Paper> */}
     </>
   );
 };
