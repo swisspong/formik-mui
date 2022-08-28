@@ -4,7 +4,7 @@ import {
   ButtonGroup,
   Grid,
   Paper,
-  Typography,
+
 } from "@mui/material";
 import { FieldArray, Form, Formik } from "formik";
 import React from "react";
@@ -24,16 +24,15 @@ const FormVariant = () => {
       const variant = values.variants;
       variant[index] = {
         manyRelate: !variant[index].manyRelate,
-        showImage: false,
-        name: !variant[index].name,
-        ...(!variant[index].manyRelate ? { options: [] } : { inventoryId: "" }),
+        name: variant[index].name,
+        defaultOption: variant[index].defaultOption,
+        options: variant[index].options.map((option) => ({
+          ...(!variant[index].manyRelate
+            ? { name: option.name, price: option.price, inventoryList: [] }
+            : { name: option.name, price: option.price, inventoryId: "" }),
+        })),
       };
-      // variant[index] = {
-      //   manyRelate: !variant[index].manyRelate,
-      //   showImage: false,
-      //   name: !variant[index].name,
-      //   ...(!variant[index].manyRelate ? { options: [] } : { inventoryId: "" }),
-      // };
+
       const tmpObj = {
         ...values,
         variants: variant,
@@ -61,7 +60,6 @@ const FormVariant = () => {
         onSubmit={onSubmit}
       >
         {(formik) => {
-  
           return (
             <Form>
               <Paper sx={{ p: 2, mb: 3 }} elevation={3}>
@@ -142,14 +140,29 @@ const FormVariant = () => {
                                                 />
                                               </Grid>
                                               <Grid item xs={12}>
-                                                <FormikControl
-                                                  control={"select"}
-                                                  name={`variants.${index}.options.${index2}.inventoryId`}
-                                                  label={
-                                                    "Select a product from inventory"
-                                                  }
-                                                  options={dropdownOptions}
-                                                />
+                                                {formik.values.variants[index]
+                                                  .manyRelate ? (
+                                                  <FormikControl
+                                                    control={"multipleSelect"}
+                                                    name={`variants.${index}.options.${index2}.inventoryList`}
+                                                    label={
+                                                      "Select many product from inventory"
+                                                    }
+                                                    labelId={
+                                                      "inventory-list-label"
+                                                    }
+                                                    options={dropdownOptions}
+                                                  />
+                                                ) : (
+                                                  <FormikControl
+                                                    control={"select"}
+                                                    name={`variants.${index}.options.${index2}.inventoryId`}
+                                                    label={
+                                                      "Select a product from inventory"
+                                                    }
+                                                    options={dropdownOptions}
+                                                  />
+                                                )}
                                               </Grid>
                                             </Grid>
 
@@ -174,7 +187,15 @@ const FormVariant = () => {
                                                       {
                                                         name: "",
                                                         price: 0,
-                                                        inventoryId: "",
+                                                        ...(formik.values
+                                                          .variants[index]
+                                                          .manyRelate
+                                                          ? {
+                                                              inventoryList: [],
+                                                            }
+                                                          : {
+                                                              inventoryId: "",
+                                                            }),
                                                       }
                                                     )
                                                   }
@@ -195,7 +216,10 @@ const FormVariant = () => {
                                           arrayHelpers.push({
                                             name: "",
                                             price: 0,
-                                            inventoryId: "",
+                                            ...(formik.values.variants[index]
+                                              .manyRelate
+                                              ? { inventoryList: [] }
+                                              : { inventoryId: "" }),
                                           })
                                         }
                                       >
@@ -219,7 +243,16 @@ const FormVariant = () => {
                                   <Button
                                     onClick={() =>
                                       arrayHelpers.insert(index, {
+                                        manyRelate: false,
                                         name: "",
+                                        defaultOption: "",
+                                        options: [
+                                          {
+                                            name: "",
+                                            price: 0,
+                                            inventoryId: "",
+                                          },
+                                        ],
                                       })
                                     }
                                   >

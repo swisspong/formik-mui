@@ -1,4 +1,5 @@
 import ImageWrapper from "./ImageWrapper";
+import MultipleSelectChip from "./MultipleSelectChip";
 import SelectWrapper from "./SelectWrapper";
 import SwitchWrapper from "./SwitchWrapper";
 import TextFieldWrapper from "./TextFieldWrapper";
@@ -9,6 +10,8 @@ const FormikControl = ({ control, ...otherProps }) => {
       return <TextFieldWrapper {...otherProps} />;
     case "select":
       return <SelectWrapper {...otherProps} />;
+    case "multipleSelect":
+      return <MultipleSelectChip {...otherProps} />;
     case "switch":
       return <SwitchWrapper {...otherProps} />;
     case "image":
