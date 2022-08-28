@@ -10,7 +10,17 @@ export const extendApiSlice = apiSlice.injectEndpoints({
     getCategories: builder.query({
       query: () => "category",
       transformResponse: (responseData) => {
-        return categoryAdapter.setAll(initialState, responseData);
+        const format = responseData.map((category) => {
+          return {
+            ...category,
+            breadcrumbs: category.breadcrumbs
+              .map((item) => item.name)
+              .join(" => ")
+              ? category.breadcrumbs.map((item) => item.name).join(" => ")
+              : "ไม่ระบุ  ",
+          };
+        });
+        return categoryAdapter.setAll(initialState, format);
       },
       providesTags: (result, error, arg) => [
         { type: "Category", id: "LIST" },
@@ -20,11 +30,10 @@ export const extendApiSlice = apiSlice.injectEndpoints({
     getCategoryById: builder.query({
       query: (id) => `category/${id}`,
       transformResponse: (responseData) => {
-        const transform = responseData.map(data=> {
-             if(data?.categories){
-                
-             }
-        })
+        const transform = responseData.map((data) => {
+          if (data?.categories) {
+          }
+        });
         return categoryAdapter.setAll(initialState, responseData);
       },
       providesTags: (result, error, arg) => {
@@ -46,6 +55,18 @@ export const extendApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: [{ type: "Category", id: "LIST" }],
     }),
+    updateCategory: builder.mutation({
+      query: ({ categoryId, initialCategory }) => ({
+        url: `category/${categoryId}`,
+        method: "PUT",
+        body: {
+          ...initialCategory,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Category", id: arg.id },
+      ],
+    }),
   }),
 });
 
@@ -53,6 +74,7 @@ export const {
   useGetCategoriesQuery,
   useGetCategoryByIdQuery,
   useCreateCategoryMutation,
+  useUpdateCategoryMutation
 } = extendApiSlice;
 
 export const selectCategoriesResult =

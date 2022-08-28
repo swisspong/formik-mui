@@ -8,10 +8,10 @@ import {
   TextField,
   FormHelperText,
 } from "@mui/material";
-import { useField } from "formik";
+import { useField, useFormikContext, getIn } from "formik";
 const TextFieldWrapper = ({ name, ...otherProps }) => {
   const [field, meta] = useField(name);
-
+  //const { values } = useFormikContext();
   const textFieldProps = {
     ...field,
     ...otherProps,
@@ -23,7 +23,12 @@ const TextFieldWrapper = ({ name, ...otherProps }) => {
   }
   return (
     <Box mx={1} my={2}>
-      <TextField {...textFieldProps} name={name} />
+      <TextField
+        {...textFieldProps}
+       // value={getIn(values, name)}
+        id={name}
+        name={name}
+      />
     </Box>
   );
 };

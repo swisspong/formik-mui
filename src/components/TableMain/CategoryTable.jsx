@@ -1,6 +1,8 @@
-import { Paper, TableContainer } from "@mui/material";
+import { Box, IconButton, Paper, TableContainer } from "@mui/material";
 import React from "react";
 import DataTable from "react-data-table-component";
+import EditIcon from "@mui/icons-material/Edit";
+import VisibilityIcon from "@mui/icons-material/Visibility";
 import { useSelector } from "react-redux";
 import {
   selectAllCategories,
@@ -9,6 +11,7 @@ import {
 } from "../../features/categorySlice";
 
 import HeadingCrud from "../HeadingCrud";
+import CustomizedMenus from "../CustomizeMenus";
 const columns = [
   {
     name: "#",
@@ -18,15 +21,42 @@ const columns = [
   },
   {
     name: "parent category",
-    selector: (row) => row.parentCategory.name,
-    sortable: true,
-    sortField: "name",
+    selector: (row) => row.breadcrumbs,
   },
   {
     name: "category name",
     selector: (row) => row.name,
-    sortable: true,
-    sortField: "path",
+  },
+  {
+    name: "Action",
+    button: true,
+    cell: (row) => {
+      return (
+        <>
+          {/* <IconButton
+            color="primary"
+            onClick={() => {
+              console.log("click updatae");
+            }}
+          >
+            <EditIcon />
+          </IconButton>
+
+          <IconButton
+            color="primary"
+            onClick={() => {
+              // openDialogHandler(true);
+              console.log("click view");
+            }}
+          >
+            <VisibilityIcon />
+          </IconButton> */}
+          <Box>
+            <CustomizedMenus id={row.id} />
+          </Box>
+        </>
+      );
+    },
   },
 ];
 const data = [
@@ -42,11 +72,11 @@ const data = [
 const CategoryTable = () => {
   const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
 
-  const categoryIds = useSelector(selectAllCategories);
+  const categories = useSelector(selectAllCategories);
   if (isLoading) {
     return <p>Loading.....</p>;
   } else if (isSuccess) {
-    return JSON.stringify(categoryIds);
+    // return JSON.stringify(categoryIds);
   } else if (isError) {
     return <p>{error}</p>;
   }
@@ -57,8 +87,8 @@ const CategoryTable = () => {
         labelBtn={"Create new +"}
         to="create"
       />
-      <TableContainer component={Paper} elevation={0}>
-        <DataTable columns={columns} data={data} />
+      <TableContainer component={Paper}>
+        <DataTable columns={columns} data={categories} />
       </TableContainer>
     </>
   );
