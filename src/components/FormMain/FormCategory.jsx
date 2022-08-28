@@ -1,29 +1,54 @@
 import { Box, Button, Paper } from "@mui/material";
 import { Form, Formik } from "formik";
 import React from "react";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
+import {
+  selectAllCategories,
+  useCreateCategoryMutation,
+  useGetCategoriesQuery,
+} from "../../features/categorySlice";
+
 import FormikControl from "../FormUi/FormikControl";
 import HeadingCrud from "../HeadingCrud";
 
 const FormCategory = () => {
-  const dropdownOptions = [
-    { key: "Select a option", value: "" },
-    { key: "Option 1", value: 1 },
-    { key: "Option 2", value: 2 },
-    { key: "Option 3", value: 3 },
-  ];
+  const navigate = useNavigate();
+
+  // const [createCategory] = useCreateCategoryMutation();
+  const [createCategory] = useCreateCategoryMutation();
+  const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
+  const categories = useSelector(selectAllCategories);
+  const dropdownOptions2 = isSuccess
+    ? categories.map((category) => ({
+        key: category.name,
+        value: category.id,
+      }))
+    : [];
+  dropdownOptions2.unshift({ key: "Select a option", value: "" });
   const initialValues = {
     parentId: "",
     name: "",
-    image: "",
-    allow: false,
+    // image: "",
+    // allow: false,
   };
+
   const validationSchema = Yup.object({
     parentId: Yup.string().required(),
     name: Yup.string().required(),
-    allow: Yup.boolean(),
+    // allow: Yup.boolean(),
   });
-  const onSubmit = (values) => console.log("formik values", values);
+  const onSubmit = async (values) => {
+    try {
+      console.log("formik values", values);
+      await createCategory(values).unwrap();
+      navigate("/category");
+    } catch (error) {
+      console.error("Failed to save the post", error);
+    }
+  };
+
   return (
     <>
       <HeadingCrud label={"Create new category"} backTo={-1} />
@@ -40,7 +65,7 @@ const FormCategory = () => {
                   control={"select"}
                   name={"parentId"}
                   label={"Parent category"}
-                  options={dropdownOptions}
+                  options={dropdownOptions2}
                 />
                 <FormikControl
                   control={"input"}

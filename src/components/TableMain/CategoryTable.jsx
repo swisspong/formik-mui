@@ -1,6 +1,13 @@
 import { Paper, TableContainer } from "@mui/material";
 import React from "react";
 import DataTable from "react-data-table-component";
+import { useSelector } from "react-redux";
+import {
+  selectAllCategories,
+  selectCategoryIds,
+  useGetCategoriesQuery,
+} from "../../features/categorySlice";
+
 import HeadingCrud from "../HeadingCrud";
 const columns = [
   {
@@ -33,6 +40,16 @@ const data = [
   },
 ];
 const CategoryTable = () => {
+  const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
+
+  const categoryIds = useSelector(selectAllCategories);
+  if (isLoading) {
+    return <p>Loading.....</p>;
+  } else if (isSuccess) {
+    return JSON.stringify(categoryIds);
+  } else if (isError) {
+    return <p>{error}</p>;
+  }
   return (
     <>
       <HeadingCrud

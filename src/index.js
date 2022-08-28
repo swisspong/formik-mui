@@ -3,15 +3,20 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { ApiProvider } from "@reduxjs/toolkit/query/react";
-import { categoryApi } from "./services/category";
+// import { extendedApiSlice } from './features/posts/postsSlice';
+import { store } from "./store";
+import { extendApiSlice } from "./features/categorySlice";
+import { Provider } from "react-redux";
+// import { usersApiSlice } from './features/users/usersSlice';
+
+store.dispatch(extendApiSlice.endpoints.getCategories.initiate());
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ApiProvider api={categoryApi}>
+    <Provider store={store}>
       <App />
-    </ApiProvider>
+    </Provider>
   </React.StrictMode>
 );
 
