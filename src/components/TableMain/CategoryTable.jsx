@@ -1,5 +1,5 @@
 import { Box, IconButton, Paper, TableContainer } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
@@ -59,19 +59,17 @@ const columns = [
     },
   },
 ];
-const data = [
-  {
-    id: 1,
-    parentCategory: {
-      id: 1,
-      name: "test->test1",
-    },
-    name: "test2",
-  },
-];
-const CategoryTable = () => {
-  const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
 
+const CategoryTable = () => {
+  const { perPage, setPerPage } = useState(10);
+  const [page, setPage] = useState(1);
+  const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
+  const rowsPerPageHandler = (rowPerPage) => {
+    setPerPage(rowPerPage);
+  };
+  const changePageHandler = (page) => {
+    setPage(page);
+  };
   const categories = useSelector(selectAllCategories);
   if (isError) {
     return <p>{JSON.stringify(error.data.message)}</p>;
@@ -86,8 +84,13 @@ const CategoryTable = () => {
       <TableContainer component={Paper}>
         <DataTable
           columns={columns}
-          data={categories}
+          data={categories.data}
           progressPending={isLoading}
+          onChangePage={changePageHandler}
+          onChangeRowsPerPage={rowsPerPageHandler}
+          pagination
+          paginationServer
+          paginationTotalRows={10}
         />
       </TableContainer>
     </>

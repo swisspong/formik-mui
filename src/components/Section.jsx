@@ -1,0 +1,20 @@
+import { Typography } from "@mui/material";
+import React from "react";
+
+const Section = ({ label, info }) => {
+  return (
+    <section style={{ display: "block", marginBottom: 20 }}>
+      <Typography
+        component={"label"}
+        variant="caption"
+        display={"block"}
+        color={"grey.600"}
+      >
+        {label}
+      </Typography>
+      {info}
+    </section>
+  );
+};
+
+export default Section;

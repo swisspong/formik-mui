@@ -73,6 +73,10 @@ export default function CustomizedMenus({ id }) {
     handleClose();
     navigate(`edit/${id}`);
   };
+  const viewHandler = () => {
+    handleClose();
+    navigate(`view/${id}`);
+  };
   const deleteHandler = () => {
     handleClose();
     swalDeleteButton()
@@ -122,7 +126,7 @@ export default function CustomizedMenus({ id }) {
           <EditIcon />
           Edit
         </MenuItem>
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={viewHandler} disableRipple>
           <VisibilityIcon />
           View
         </MenuItem>

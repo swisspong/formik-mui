@@ -8,12 +8,14 @@ const initialState = categoryAdapter.getInitialState();
 export const extendApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query({
-      query: () => "category",
+      query: (page = 1, per_page = 10) =>
+        `category?page=${page}&per_page=${per_page}`,
       validateStatus: (response, result) => {
         return response.status === 200 && !result.isError;
       },
       transformResponse: (responseData) => {
-        const format = responseData.map((category) => {
+        const format2 = responseData;
+        format2.data = format2.data.map((category) => {
           return {
             ...category,
             breadcrumbs: category.breadcrumbs
@@ -23,7 +25,7 @@ export const extendApiSlice = apiSlice.injectEndpoints({
               : "ไม่ระบุ  ",
           };
         });
-        return categoryAdapter.setAll(initialState, format);
+        return categoryAdapter.setAll(initialState, format2);
       },
       providesTags: (result, error, arg) => {
         if (result?.ids) {
@@ -33,10 +35,6 @@ export const extendApiSlice = apiSlice.injectEndpoints({
           ];
         } else return [{ type: "Category", id: "LIST" }];
       },
-      // [
-      //   { type: "Category", id: "LIST" },
-      //   ...result?.ids.map((id) => ({ type: "Category", id })),
-      // ],
     }),
     getCategoryById: builder.query({
       query: (id) => `category/${id}`,
