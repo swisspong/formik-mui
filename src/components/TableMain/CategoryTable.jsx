@@ -73,12 +73,8 @@ const CategoryTable = () => {
   const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
 
   const categories = useSelector(selectAllCategories);
-  if (isLoading) {
-    return <p>Loading.....</p>;
-  } else if (isSuccess) {
-    // return JSON.stringify(categoryIds);
-  } else if (isError) {
-    return <p>{error}</p>;
+  if (isError) {
+    return <p>{JSON.stringify(error.data.message)}</p>;
   }
   return (
     <>
@@ -88,7 +84,11 @@ const CategoryTable = () => {
         to="create"
       />
       <TableContainer component={Paper}>
-        <DataTable columns={columns} data={categories} />
+        <DataTable
+          columns={columns}
+          data={categories}
+          progressPending={isLoading}
+        />
       </TableContainer>
     </>
   );

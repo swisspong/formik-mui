@@ -12,6 +12,8 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { swalCreateFail, swalDeleteButton } from "../utils/sweetAlertUtil";
+import { useDeleteCategoryMutation } from "../features/categorySlice";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -58,6 +60,7 @@ const StyledMenu = styled((props) => (
 
 export default function CustomizedMenus({ id }) {
   const navigate = useNavigate();
+  const [deleteCategory] = useDeleteCategoryMutation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -69,6 +72,26 @@ export default function CustomizedMenus({ id }) {
   const editHandler = () => {
     handleClose();
     navigate(`edit/${id}`);
+  };
+  const deleteHandler = () => {
+    handleClose();
+    swalDeleteButton()
+      .then((result) => {
+        if (result.isConfirmed) {
+          return true;
+        } else {
+          return false;
+        }
+      })
+      .then((isConfirmed) => {
+        
+        if (isConfirmed) {
+          return deleteCategory({ id }).unwrap();
+        }
+      })
+      .catch((error) => {
+        swalCreateFail(error.data.message);
+      });
   };
 
   return (
@@ -104,7 +127,7 @@ export default function CustomizedMenus({ id }) {
           View
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={handleClose} disableRipple>
+        <MenuItem onClick={deleteHandler} disableRipple>
           <DeleteIcon />
           Delete
         </MenuItem>

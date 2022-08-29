@@ -11,6 +11,11 @@ import {
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import FormCategory2 from "../../components/FormMain/FormCategory2";
+import {
+  swalCreateFail,
+  swalEditSuccess,
+  swalLoadingNew,
+} from "../../utils/sweetAlertUtil";
 const EditCategory = () => {
   const { categoryId } = useParams();
   const navigate = useNavigate();
@@ -40,9 +45,12 @@ const EditCategory = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
+      swalLoadingNew();
       await updateCategory({ categoryId, initialCategory: values }).unwrap();
+      swalEditSuccess();
       navigate("/category");
     } catch (error) {
+      swalCreateFail(error.data.message);
       console.error("Failed to save the post", error);
     }
   };

@@ -9,6 +9,11 @@ import {
 import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import FormCategory2 from "../../components/FormMain/FormCategory2";
+import {
+  swalCreateFail,
+  swalLoadingNew,
+  swalSaveSuccess,
+} from "../../utils/sweetAlertUtil";
 const CreateCategory = () => {
   const navigate = useNavigate();
 
@@ -37,21 +42,29 @@ const CreateCategory = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
+      swalLoadingNew();
       await createCategory(values).unwrap();
+      swalSaveSuccess();
       navigate("/category");
     } catch (error) {
-      console.error("Failed to save the post", error);
+      swalCreateFail(error.data.message);
+      console.error("Failed to save the post", error.data.message);
     }
   };
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
   return (
     <>
       <HeadingCrud label={"Create new category"} backTo={-1} />
-      <FormCategory2
-        dropdownOptions={dropdownOptions2}
-        initialValues={initialValues}
-        onSubmit={onSubmit}
-        validationSchema={validationSchema}
-      />
+      {isSuccess && (
+        <FormCategory2
+          dropdownOptions={dropdownOptions2}
+          initialValues={initialValues}
+          onSubmit={onSubmit}
+          validationSchema={validationSchema}
+        />
+      )}
     </>
   );
 };

@@ -9,6 +9,9 @@ export const extendApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query({
       query: () => "category",
+      validateStatus: (response, result) => {
+        return response.status === 200 && !result.isError;
+      },
       transformResponse: (responseData) => {
         const format = responseData.map((category) => {
           return {
@@ -22,10 +25,18 @@ export const extendApiSlice = apiSlice.injectEndpoints({
         });
         return categoryAdapter.setAll(initialState, format);
       },
-      providesTags: (result, error, arg) => [
-        { type: "Category", id: "LIST" },
-        ...result.ids.map((id) => ({ type: "Category", id })),
-      ],
+      providesTags: (result, error, arg) => {
+        if (result?.ids) {
+          return [
+            { type: "Category", id: "LIST" },
+            ...result.ids.map((id) => ({ type: "Category", id })),
+          ];
+        } else return [{ type: "Category", id: "LIST" }];
+      },
+      // [
+      //   { type: "Category", id: "LIST" },
+      //   ...result?.ids.map((id) => ({ type: "Category", id })),
+      // ],
     }),
     getCategoryById: builder.query({
       query: (id) => `category/${id}`,
@@ -67,6 +78,15 @@ export const extendApiSlice = apiSlice.injectEndpoints({
         { type: "Category", id: arg.id },
       ],
     }),
+    deleteCategory: builder.mutation({
+      query: ({ id }) => ({
+        url: `category?id=${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Category", id: arg.id },
+      ],
+    }),
   }),
 });
 
@@ -74,7 +94,8 @@ export const {
   useGetCategoriesQuery,
   useGetCategoryByIdQuery,
   useCreateCategoryMutation,
-  useUpdateCategoryMutation
+  useUpdateCategoryMutation,
+  useDeleteCategoryMutation,
 } = extendApiSlice;
 
 export const selectCategoriesResult =
