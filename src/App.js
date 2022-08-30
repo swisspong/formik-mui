@@ -129,7 +129,7 @@ function App() {
       .of(Yup.object({ name: Yup.string().required() }))
       .min(1),
   });
-  const onSubmit = (values) => console.log("formik values", values);
+
   return (
     <BrowserRouter>
       <Routes>

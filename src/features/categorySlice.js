@@ -8,7 +8,7 @@ const initialState = categoryAdapter.getInitialState();
 export const extendApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query({
-      query: ({ page = 1, per_page = 10 }) =>
+      query: ( page = 1, per_page = 10 ) =>
         `category?page=${page}&per_page=${per_page}`,
       validateStatus: (response, result) => {
         return response.status === 200 && !result.isError;
@@ -28,7 +28,7 @@ export const extendApiSlice = apiSlice.injectEndpoints({
         return format2;
       },
       providesTags: (result, error, arg) => {
-        console.log(result);
+     
         if (result?.data) {
           return [
             { type: "Category", id: "LIST" },

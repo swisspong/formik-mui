@@ -31,7 +31,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const drawerWidth = 240;
@@ -106,6 +106,13 @@ const Layout = (props) => {
       </List> */}
     </div>
   );
+  const breadcrumbNameMap = {
+    "/inbox": "Inbox",
+    "/inbox/important": "Important",
+    "/trash": "Trash",
+    "/spam": "Spam",
+    "/drafts": "Drafts",
+  };
 
   const breadcrumbs = [
     <Link
@@ -134,6 +141,10 @@ const Layout = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
+
+    const location = useLocation();
+    const pathnames = location.pathname.split('/').filter((x) => x);
+    console.log(pathnames)
   return (
     <Box sx={{ display: "flex", bgcolor: "grey.50", minHeight: "100vh" }}>
       <CssBaseline />

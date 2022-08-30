@@ -12,7 +12,11 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { swalCreateFail, swalDeleteButton } from "../utils/sweetAlertUtil";
+import {
+  swalCreateFail,
+  swalDeleteButton,
+  swalDeleteSuccess,
+} from "../utils/sweetAlertUtil";
 import { useDeleteCategoryMutation } from "../features/categorySlice";
 
 const StyledMenu = styled((props) => (
@@ -93,8 +97,11 @@ export default function CustomizedMenus({
       })
       .then((isConfirmed) => {
         if (isConfirmed) {
-          return deleteHandler({ id }).unwrap();
+          return deleteHandler().unwrap();
         }
+      })
+      .then((res) => {
+        swalDeleteSuccess();
       })
       .catch((error) => {
         swalCreateFail(error.data.message);

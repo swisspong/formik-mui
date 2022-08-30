@@ -5,6 +5,7 @@ import {
   useDeleteInventoryMutation,
   useGetInventoriesQuery,
 } from "../../features/inventory/inventoryApiSlice";
+import { formatDate } from "../../utils/formatDate";
 import CustomizedMenus from "../CustomizeMenus";
 
 import HeadingCrud from "../HeadingCrud";
@@ -29,6 +30,14 @@ const columns = (deleteHandler) => [
   {
     name: "Quantity in Stock",
     selector: (row) => row.quantity,
+  },
+  {
+    name: "created at",
+    selector: (row) => formatDate(row.createdAt),
+  },
+  {
+    name: "updated at",
+    selector: (row) => formatDate(row.updatedAt),
   },
   {
     name: "Action",

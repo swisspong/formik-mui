@@ -1,7 +1,8 @@
 import moment from "moment-timezone";
-export const formatDate = (dateTime)=>{
-    return moment(dateTime)
+import 'moment/locale/th';
+export const formatDate = (dateTime) => {
+  return moment(dateTime)
     .tz("Asia/Bangkok")
     .locale("th")
-    .format("DD-MM-YYYY HH:mm:ss")
-}
+    .format("DD MMM YYYY เวลา HH:mm:ss")
+};

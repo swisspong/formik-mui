@@ -32,7 +32,7 @@ const EditCategory = () => {
     isLoading,
     isSuccess,
     error,
-  } = useGetCategoriesQuery({ page: 1, per_page: 200 });
+  } = useGetCategoriesQuery(1, 200);
 
   const dropdownOptions2 = isSuccess
     ? categories.data.map((category) => ({
@@ -50,11 +50,15 @@ const EditCategory = () => {
     // parentId: Yup.string().required(),
     // name: Yup.string().required(),
   });
+  console.log(categoryId);
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      await updateCategory({ categoryId, initialCategory: values }).unwrap();
+      await updateCategory({
+        id: Number(categoryId),
+        initialCategory: values,
+      }).unwrap();
       swalEditSuccess();
       navigate("/category");
     } catch (error) {

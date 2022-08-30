@@ -25,7 +25,7 @@ const CreateCategory = () => {
     isLoading,
     isSuccess,
     error,
-  } = useGetCategoriesQuery({ page: 1, per_page: 200 });
+  } = useGetCategoriesQuery(1, 200);
 
   const dropdownOptions2 = isSuccess
     ? categories.data.map((category) => ({
@@ -42,8 +42,8 @@ const CreateCategory = () => {
   };
 
   const validationSchema = Yup.object({
-    parentId: Yup.string().required(),
-    name: Yup.string().required(),
+    //parentId: Yup.string().required(),
+    // name: Yup.string().required(),
     // allow: Yup.boolean(),
   });
   const onSubmit = async (values) => {

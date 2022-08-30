@@ -11,6 +11,7 @@ import {
 
 import HeadingCrud from "../HeadingCrud";
 import CustomizedMenus from "../CustomizeMenus";
+import { formatDate } from "../../utils/formatDate";
 const columns = (deleteHandler) => [
   {
     name: "#",
@@ -27,6 +28,14 @@ const columns = (deleteHandler) => [
     selector: (row) => row.name,
   },
   {
+    name: "created at",
+    selector: (row) => formatDate(row.createdAt),
+  },
+  {
+    name: "updated at",
+    selector: (row) => formatDate(row.updatedAt),
+  },
+  {
     name: "Action",
     button: true,
     cell: (row) => {
@@ -37,7 +46,7 @@ const columns = (deleteHandler) => [
               id={row.id}
               editPath={`edit/${row.id}`}
               viewPath={`view/${row.id}`}
-              deleteHandler={deleteHandler}
+              deleteHandler={() => deleteHandler({ id: row.id })}
             />
           </Box>
         </>
@@ -56,10 +65,7 @@ const CategoryTable = () => {
     isLoading,
     isSuccess,
     error,
-  } = useGetCategoriesQuery({
-    page,
-    per_page: perPage,
-  });
+  } = useGetCategoriesQuery(page, perPage);
   const rowsPerPageHandler = (rowPerPage) => {
     setPerPage(rowPerPage);
   };

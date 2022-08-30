@@ -19,6 +19,7 @@ import {
 } from "../../utils/sweetAlertUtil";
 const EditCategory = () => {
   const { categoryId } = useParams();
+  console.log(categoryId);
   const navigate = useNavigate();
   // const category = useSelector((state) =>
   //   selectCategoryById(state, Number(categoryId))
@@ -32,7 +33,7 @@ const EditCategory = () => {
     isLoading,
     isSuccess,
     error,
-  } = useGetCategoriesQuery({ page: 1, per_page: 200 });
+  } = useGetCategoriesQuery(1, 200);
 
   const dropdownOptions2 = isSuccess
     ? categories.data.map((category) => ({
@@ -54,9 +55,12 @@ const EditCategory = () => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      await updateCategory({ categoryId, initialCategory: values }).unwrap();
+      await updateCategory({
+        id: categoryId,
+        initialCategory: values,
+      }).unwrap();
       swalEditSuccess();
-      navigate("/category");
+      navigate(-1);
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error);
