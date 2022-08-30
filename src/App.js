@@ -46,6 +46,7 @@ import FormVariant from "./components/FormMain/FormVariant";
 import CreateCategory from "./features/category/CreateCategory";
 import EditCategory from "./features/category/EditCategory";
 import ViewCategory from "./features/category/ViewCategory";
+import CreateInventory from "./features/inventory/CreateInventory";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -139,11 +140,11 @@ function App() {
             <Route index element={<CategoryTable />} />
             <Route path="create" element={<CreateCategory />} />
             <Route path="edit/:categoryId" element={<EditCategory />} />
-            <Route path="view/:categoryId" element={<ViewCategory/>} />
+            <Route path="view/:categoryId" element={<ViewCategory />} />
           </Route>
           <Route path="inventory">
             <Route index element={<InventoryTable />} />
-            <Route path="create" element={<FormInventory />} />
+            <Route path="create" element={<CreateInventory />} />
           </Route>
           <Route path="product">
             <Route index element={<ProductTable />} />

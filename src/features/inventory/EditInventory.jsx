@@ -2,10 +2,7 @@ import React from "react";
 import HeadingCrud from "../../components/HeadingCrud";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  selectAllCategories,
-  selectCategoryById,
-  useCreateCategoryMutation,
-  useGetCategoriesQuery,
+  
   useGetCategoryByIdQuery,
   useUpdateCategoryMutation,
 } from "../categorySlice";
@@ -17,40 +14,26 @@ import {
   swalEditSuccess,
   swalLoadingNew,
 } from "../../utils/sweetAlertUtil";
-const EditCategory = () => {
-  const { categoryId } = useParams();
+import FormInventory2 from "./FormInventory2";
+const EditInventory = () => {
+  const { inventoryId } = useParams();
   const navigate = useNavigate();
-  // const category = useSelector((state) =>
-  //   selectCategoryById(state, Number(categoryId))
-  // );
-  const { data: category, isSuccess: isSuccessCategory } =
-    useGetCategoryByIdQuery(categoryId);
-  const [updateCategory] = useUpdateCategoryMutation();
-  const {
-    data: categories,
-    isError,
-    isLoading,
-    isSuccess,
-    error,
-  } = useGetCategoriesQuery(1, 200);
 
-  const dropdownOptions2 = isSuccess
-    ? categories.data.map((category) => ({
-        key: category.name,
-        value: category.id,
-      }))
-    : [];
-  dropdownOptions2.unshift({ key: "Select a option", value: "" });
+  const { data: inventory, isSuccess: isSuccessInventory } =
+    useGetCategoryByIdQuery(inventoryId);
+  const [updateCategory] = useUpdateCategoryMutation();
+
   const initialValues = {
-    parentId: category?.parentId ? category.parentId : "",
-    name: category?.name,
+    name: "",
+    cost: 0,
+    quantity: 0,
   };
 
   const validationSchema = Yup.object({
     // parentId: Yup.string().required(),
     // name: Yup.string().required(),
   });
-  console.log(categoryId);
+  
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
@@ -70,9 +53,9 @@ const EditCategory = () => {
   return (
     <>
       <HeadingCrud label={"Update category"} backTo={-1} />
-      {isSuccess && isSuccessCategory && (
-        <FormCategory2
-          dropdownOptions={dropdownOptions2}
+      { isSuccessCategory && (
+        <FormInventory2
+    
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
@@ -82,4 +65,4 @@ const EditCategory = () => {
   );
 };
 
-export default EditCategory;
+export default EditInventory;

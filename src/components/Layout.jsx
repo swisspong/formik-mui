@@ -31,7 +31,12 @@ import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+  useNavigate,
+  Link as RouterLink,
+} from "react-router-dom";
 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 const drawerWidth = 240;
@@ -107,12 +112,58 @@ const Layout = (props) => {
     </div>
   );
   const breadcrumbNameMap = {
-    "/inbox": "Inbox",
-    "/inbox/important": "Important",
-    "/trash": "Trash",
-    "/spam": "Spam",
-    "/drafts": "Drafts",
+    "": "Dashboard",
+    category: "Category",
+    inventory: "Inventory",
+    product: "Product",
+    create: "Create",
+    edit: "Edit",
+    view: "View",
   };
+  const location = useLocation();
+  const pathnames = location.pathname.split("/").filter((x) => x);
+  console.log(pathnames);
+  const pathnamesFilter = pathnames.filter((item) =>
+    !breadcrumbNameMap[item] ? false : true
+  );
+  const newBreadcrumbs = pathnamesFilter.map((path, index) => {
+    if (index === pathnamesFilter.length - 1) {
+      console.log("case 1");
+      return (
+        <Typography key={index + 1} color="text.primary">
+          {breadcrumbNameMap[path]}
+        </Typography>
+      );
+    } else {
+      console.log("case 2");
+      let url = "";
+      for (let i = 0; i < index + 1; i++) {
+        url += "/" + pathnamesFilter[index];
+      }
+      return (
+        <Link
+          component={RouterLink}
+          underline="hover"
+          key={index + 1}
+          color="inherit"
+          to={url}
+        >
+          {breadcrumbNameMap[path]}
+        </Link>
+      );
+    }
+  });
+  newBreadcrumbs.unshift(
+    <Link
+      component={RouterLink}
+      underline="hover"
+      key={0}
+      color="inherit"
+      to={"/"}
+    >
+      {"Dashboard"}
+    </Link>
+  );
 
   const breadcrumbs = [
     <Link
@@ -141,10 +192,6 @@ const Layout = (props) => {
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
-
-    const location = useLocation();
-    const pathnames = location.pathname.split('/').filter((x) => x);
-    console.log(pathnames)
   return (
     <Box sx={{ display: "flex", bgcolor: "grey.50", minHeight: "100vh" }}>
       <CssBaseline />
@@ -287,7 +334,7 @@ const Layout = (props) => {
           aria-label="breadcrumb"
           sx={{ mb: 2 }}
         >
-          {breadcrumbs}
+          {newBreadcrumbs}
         </Breadcrumbs>
 
         <Outlet />

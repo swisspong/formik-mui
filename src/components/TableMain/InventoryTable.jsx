@@ -46,7 +46,11 @@ const columns = (deleteHandler) => [
       return (
         <>
           <Box>
-            <CustomizedMenus id={row.id} deleteHandler={deleteHandler} />
+            <CustomizedMenus
+              editPath={`edit/${row.id}`}
+              viewPath={`view/${row.id}`}
+              deleteHandler={() => deleteHandler({ id: row.id })}
+            />
           </Box>
         </>
       );

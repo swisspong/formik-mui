@@ -6,12 +6,7 @@ import FormikControl from "../FormUi/FormikControl";
 import HeadingCrud from "../HeadingCrud";
 
 const FormInventory = () => {
-  const dropdownOptions = [
-    { key: "Select a option", value: "" },
-    { key: "Option 1", value: 1 },
-    { key: "Option 2", value: 2 },
-    { key: "Option 3", value: 3 },
-  ];
+
   const initialValues = {
     categoryId: "",
     name: "",
@@ -20,7 +15,7 @@ const FormInventory = () => {
     quantity: 0,
   };
   const validationSchema = Yup.object({
-    categoryId: Yup.string().required(),
+    
     name: Yup.string().required(),
     cost: Yup.number().min(0).required(),
     quantity: Yup.number().min(0).required(),
@@ -38,16 +33,11 @@ const FormInventory = () => {
           {(formik) => {
             return (
               <Form>
-                <FormikControl
-                  control={"select"}
-                  name={"categoryId"}
-                  label={"Category"}
-                  options={dropdownOptions}
-                />
+                
                 <FormikControl
                   control={"input"}
                   name={"name"}
-                  label={"Category name"}
+                  label={"Product in inventory name"}
                   fullWidth
                 />
 
@@ -70,7 +60,6 @@ const FormInventory = () => {
                   label={"Quantity Stock"}
                   fullWidth
                 />
-
                 <Box m={1}>
                   <Button type="submit" variant="contained">
                     Submit
