@@ -18,10 +18,17 @@ const CreateCategory = () => {
   const navigate = useNavigate();
 
   const [createCategory] = useCreateCategoryMutation();
-  const { isError, isLoading, isSuccess, error } = useGetCategoriesQuery();
-  const categories = useSelector(selectAllCategories);
+
+  const {
+    data: categories,
+    isError,
+    isLoading,
+    isSuccess,
+    error,
+  } = useGetCategoriesQuery({ page: 1, per_page: 200 });
+
   const dropdownOptions2 = isSuccess
-    ? categories.map((category) => ({
+    ? categories.data.map((category) => ({
         key: category.name,
         value: category.id,
       }))

@@ -58,9 +58,13 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-export default function CustomizedMenus({ id }) {
+export default function CustomizedMenus({
+  id,
+  editPath,
+  viewPath,
+  deleteHandler,
+}) {
   const navigate = useNavigate();
-  const [deleteCategory] = useDeleteCategoryMutation();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -71,13 +75,13 @@ export default function CustomizedMenus({ id }) {
   };
   const editHandler = () => {
     handleClose();
-    navigate(`edit/${id}`);
+    navigate(editPath);
   };
   const viewHandler = () => {
     handleClose();
-    navigate(`view/${id}`);
+    navigate(viewPath);
   };
-  const deleteHandler = () => {
+  const deleteHandleClick = () => {
     handleClose();
     swalDeleteButton()
       .then((result) => {
@@ -88,9 +92,8 @@ export default function CustomizedMenus({ id }) {
         }
       })
       .then((isConfirmed) => {
-        
         if (isConfirmed) {
-          return deleteCategory({ id }).unwrap();
+          return deleteHandler({ id }).unwrap();
         }
       })
       .catch((error) => {
@@ -131,7 +134,7 @@ export default function CustomizedMenus({ id }) {
           View
         </MenuItem>
         <Divider sx={{ my: 0.5 }} />
-        <MenuItem onClick={deleteHandler} disableRipple>
+        <MenuItem onClick={deleteHandleClick} disableRipple>
           <DeleteIcon />
           Delete
         </MenuItem>

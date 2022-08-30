@@ -8,7 +8,7 @@ const initialState = categoryAdapter.getInitialState();
 export const extendApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     getCategories: builder.query({
-      query: (page = 1, per_page = 10) =>
+      query: ({ page = 1, per_page = 10 }) =>
         `category?page=${page}&per_page=${per_page}`,
       validateStatus: (response, result) => {
         return response.status === 200 && !result.isError;
@@ -25,13 +25,14 @@ export const extendApiSlice = apiSlice.injectEndpoints({
               : "ไม่ระบุ  ",
           };
         });
-        return categoryAdapter.setAll(initialState, format2);
+        return format2;
       },
       providesTags: (result, error, arg) => {
-        if (result?.ids) {
+        console.log(result);
+        if (result?.data) {
           return [
             { type: "Category", id: "LIST" },
-            ...result.ids.map((id) => ({ type: "Category", id })),
+            ...result.data.map(({ id }) => ({ type: "Category", id })),
           ];
         } else return [{ type: "Category", id: "LIST" }];
       },
@@ -39,20 +40,15 @@ export const extendApiSlice = apiSlice.injectEndpoints({
     getCategoryById: builder.query({
       query: (id) => `category/${id}`,
       transformResponse: (responseData) => {
-        const transform = responseData.map((data) => {
-          if (data?.categories) {
-          }
-        });
-        return categoryAdapter.setAll(initialState, responseData);
+        const format = responseData;
+        format.breadcrumbs = format.breadcrumbs
+          .map((item) => item.name)
+          .join(" => ")
+          ? format.breadcrumbs.map((item) => item.name).join(" => ")
+          : "ไม่ระบุ  ";
+        return format;
       },
-      providesTags: (result, error, arg) => {
-        return [
-          ...result.ids.map((id) => ({
-            type: "Category",
-            id,
-          })),
-        ];
-      },
+      providesTags: (result, error, id) => [{ type: "Category", id }],
     }),
     createCategory: builder.mutation({
       query: (initialCategory) => ({
@@ -65,8 +61,8 @@ export const extendApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Category", id: "LIST" }],
     }),
     updateCategory: builder.mutation({
-      query: ({ categoryId, initialCategory }) => ({
-        url: `category/${categoryId}`,
+      query: ({ id, initialCategory }) => ({
+        url: `category/${id}`,
         method: "PUT",
         body: {
           ...initialCategory,
