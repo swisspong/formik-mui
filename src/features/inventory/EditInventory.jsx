@@ -2,7 +2,6 @@ import React from "react";
 import HeadingCrud from "../../components/HeadingCrud";
 import { useNavigate, useParams } from "react-router-dom";
 import {
-  
   useGetCategoryByIdQuery,
   useUpdateCategoryMutation,
 } from "../categorySlice";
@@ -15,35 +14,39 @@ import {
   swalLoadingNew,
 } from "../../utils/sweetAlertUtil";
 import FormInventory2 from "./FormInventory2";
+import {
+  useGetInventoryByIdQuery,
+  useUpdateInventoryMutation,
+} from "./inventoryApiSlice";
 const EditInventory = () => {
   const { inventoryId } = useParams();
   const navigate = useNavigate();
 
   const { data: inventory, isSuccess: isSuccessInventory } =
-    useGetCategoryByIdQuery(inventoryId);
-  const [updateCategory] = useUpdateCategoryMutation();
-
+    useGetInventoryByIdQuery(inventoryId);
+  const [updateInventory] = useUpdateInventoryMutation();
+  console.log(inventory);
   const initialValues = {
-    name: "",
-    cost: 0,
-    quantity: 0,
+    name: inventory?.name,
+    cost: inventory?.costPrice,
+    quantity: inventory?.quantity,
   };
 
   const validationSchema = Yup.object({
     // parentId: Yup.string().required(),
     // name: Yup.string().required(),
   });
-  
+
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      await updateCategory({
-        id: Number(categoryId),
-        initialCategory: values,
+      await updateInventory({
+        id: inventoryId,
+        initialInventory: values,
       }).unwrap();
       swalEditSuccess();
-      navigate("/category");
+      navigate(-1);
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error);
@@ -53,9 +56,8 @@ const EditInventory = () => {
   return (
     <>
       <HeadingCrud label={"Update category"} backTo={-1} />
-      { isSuccessCategory && (
+      {isSuccessInventory && (
         <FormInventory2
-    
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}

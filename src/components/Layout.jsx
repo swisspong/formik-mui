@@ -119,6 +119,7 @@ const Layout = (props) => {
     create: "Create",
     edit: "Edit",
     view: "View",
+    variants: "Variants",
   };
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
@@ -126,6 +127,7 @@ const Layout = (props) => {
   const pathnamesFilter = pathnames.filter((item) =>
     !breadcrumbNameMap[item] ? false : true
   );
+  console.log("pathnameFilter",pathnamesFilter)
   const newBreadcrumbs = pathnamesFilter.map((path, index) => {
     if (index === pathnamesFilter.length - 1) {
       console.log("case 1");
@@ -135,11 +137,30 @@ const Layout = (props) => {
         </Typography>
       );
     } else {
+      //console.log("test", pathnames);
+
+      // *** config here
       console.log("case 2");
+      console.log(
+        undefined === breadcrumbNameMap[pathnames[pathnames.indexOf(path) + 1]]
+      );
+      console.log(pathnames[pathnames.indexOf(path) + 1]);
+     
       let url = "";
       for (let i = 0; i < index + 1; i++) {
-        url += "/" + pathnamesFilter[index];
+        url += "/" + pathnamesFilter[i];
+        if (
+          undefined ===
+          breadcrumbNameMap[pathnames[pathnames.indexOf(path) + 1]]
+        ) {
+          if (pathnamesFilter[i] === path) {
+            console.log("path",path)
+            console.log(pathnamesFilter[index])
+            url += "/" + pathnames[pathnames.indexOf(path) + 1];
+          }
+        }
       }
+      console.log(url)
       return (
         <Link
           component={RouterLink}

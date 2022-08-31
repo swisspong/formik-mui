@@ -35,14 +35,16 @@ const HeadingCrud = ({
       })
       .then((isConfirmed) => {
         if (isConfirmed) {
-          return deleteHandler().unwrap();
+          return deleteHandler()
+            .unwrap()
+            .then(() => {
+              swalDeleteSuccess();
+              navigate(-1);
+            });
         }
       })
-      .then(() => {
-        swalDeleteSuccess();
-        navigate(-1);
-      })
       .catch((error) => {
+        console.log(error);
         swalCreateFail(error.data.message);
       });
   };

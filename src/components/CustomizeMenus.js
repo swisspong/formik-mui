@@ -97,12 +97,14 @@ export default function CustomizedMenus({
       })
       .then((isConfirmed) => {
         if (isConfirmed) {
-          return deleteHandler().unwrap();
+          return deleteHandler()
+            .unwrap()
+            .then((res) => {
+              swalDeleteSuccess();
+            });
         }
       })
-      .then((res) => {
-        swalDeleteSuccess();
-      })
+
       .catch((error) => {
         swalCreateFail(error.data.message);
       });

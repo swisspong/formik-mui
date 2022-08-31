@@ -1,31 +1,43 @@
-import { Paper, Typography } from "@mui/material";
+import { Paper } from "@mui/material";
 import React from "react";
-import { useSelector } from "react-redux";
+
 import { useParams } from "react-router-dom";
 import HeadingCrud from "../../components/HeadingCrud";
 import Section from "../../components/Section";
 import { formatDate } from "../../utils/formatDate";
-import { selectCategoryById, useGetCategoryByIdQuery } from "../categorySlice";
 
-const ViewCategory = () => {
-  const { categoryId } = useParams();
-  const { data: category, isSuccess } = useGetCategoryByIdQuery(categoryId);
-  console.log(category);
+import {
+  useDeleteInventoryMutation,
+  useGetInventoryByIdQuery,
+} from "./inventoryApiSlice";
+
+const ViewInventory = () => {
+  const { inventoryId } = useParams();
+  const { data: inventory, isSuccess } = useGetInventoryByIdQuery(inventoryId);
+  const [deleteInventory] = useDeleteInventoryMutation();
+  console.log(inventory);
   return (
     <>
-      <HeadingCrud label={"View category"} backTo={-1} />
+      <HeadingCrud
+        label={"View category"}
+        backTo={-1}
+        editPath={`/inventory/edit/${inventoryId}`}
+        deleteHandler={() => deleteInventory({ id: inventoryId })}
+      />
       {isSuccess && (
         <Paper sx={{ p: 4 }}>
-          <Section label={"ID"} info={category?.id} />
-          <Section label={"Parent category"} info={category?.breadcrumbs} />
-          <Section label={"Category name"} info={category?.name} />
+          <Section label={"ID"} info={inventory?.id} />
+
+          <Section label={"Product in inventory name"} info={inventory?.name} />
+          <Section label={"Cost price"} info={inventory?.costPrice} />
+          <Section label={"Quantity"} info={inventory?.quantity} />
           <Section
             label={"created at"}
-            info={formatDate(category?.updatedAt)}
+            info={formatDate(inventory?.updatedAt)}
           />
           <Section
             label={"updated at"}
-            info={formatDate(category?.createdAt)}
+            info={formatDate(inventory?.createdAt)}
           />
         </Paper>
       )}
@@ -33,4 +45,4 @@ const ViewCategory = () => {
   );
 };
 
-export default ViewCategory;
+export default ViewInventory;
