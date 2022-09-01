@@ -50,6 +50,18 @@ export const extendApiSlice = apiSlice.injectEndpoints({
         { type: "Product", id: arg.id },
       ],
     }),
+    updateProductVariant: builder.mutation({
+      query: ({ id, initialInventory }) => ({
+        url: `product/${id}/variants`,
+        method: "PUT",
+        body: {
+          ...initialInventory,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Product", id: arg.id },
+      ],
+    }),
     deleteProduct: builder.mutation({
       query: ({ id }) => ({
         url: `product?id=${id}`,
@@ -67,6 +79,7 @@ export const {
   useCreateProductMutation,
   useUpdateProductMutation,
   useDeleteProductMutation,
+  useUpdateProductVariantMutation,
 } = extendApiSlice;
 
 export const selectInventoryResult =

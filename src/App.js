@@ -54,6 +54,7 @@ import CreateProduct from "./features/product/CreateProduct";
 import EditProduct from "./features/product/EditProduct";
 import ViewProduct from "./features/product/ViewProduct";
 import UpsertVariant from "./features/product/variants/UpsertVariant";
+import UpdateOption from "./features/product/variants/options/UpdateOptions";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -161,7 +162,11 @@ function App() {
             <Route path="view/:productId" element={<ViewProduct />} />
             <Route path="edit/:productId">
               <Route index element={<EditProduct />} />
-              <Route path="variants" element={<UpsertVariant />} />
+              {/* <Route path="variants" element={<UpsertVariant />} /> */}
+              <Route path="variants">
+                <Route index element={<UpsertVariant />} />
+                <Route path=":optionGroupId/options" element={<UpdateOption/>}/>
+              </Route>
             </Route>
           </Route>
         </Route>
