@@ -8,7 +8,11 @@ import {
   swalLoadingNew,
   swalSaveSuccess,
 } from "../../../../utils/sweetAlertUtil";
-import { useGetProductByIdQuery } from "../../productApiSlice";
+import { useGetInventoriesQuery } from "../../../inventory/inventoryApiSlice";
+import {
+  useGetProductByIdQuery,
+  useUpdateOptoinsMutation,
+} from "../../productApiSlice";
 import FormOptions from "./FormOptions";
 
 const UpdateOption = () => {
@@ -16,26 +20,62 @@ const UpdateOption = () => {
   const navigate = useNavigate();
 
   const { data: product, isSuccess } = useGetProductByIdQuery(productId);
+  const { data: inventory, isSuccess: isSuccessInventory } =
+    useGetInventoriesQuery(1, 200);
+  const [updateOptions] = useUpdateOptoinsMutation();
   console.log(productId);
+
+  const optionGroup = product?.optionGroupList?.find(
+    (optionGroup) => optionGroup.id === Number(optionGroupId)
+  );
+
+  console.log(optionGroup);
+
   const initialValues = {
-    variants: product?.optionGroupList,
+    // manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
+    manyRelate: false,
+    showImage: false,
+    // options: [
+    //   {
+    //     name: "",
+    //     price: 0,
+    //     inventoryId: "",
+    //   },
+    // ],
+    options: optionGroup?.options
+      ? optionGroup.options.map((option) => ({
+          name: option.name,
+          price: Number(option.price),
+          inventoryId: !option.manyRelate
+            ? option.optionInventoryList[0].inventory.id
+            : "",
+        }))
+      : [
+          {
+            name: "",
+            price: 0,
+            inventoryId: "",
+          },
+        ],
   };
   const validationSchema = Yup.object({
-    // categoryId: Yup.string().required(),
-    // inventoryId: Yup.string().required(),
-    // name: Yup.string().required(),
-    // availableStock: Yup.number().integer().min(0).required(),
-    // price: Yup.number().min(0).required(),
-    // description: Yup.string().required(),
+    // variants: Yup.array()
+    //   .of(Yup.object({ name: Yup.string().required() }))
+    //   .min(1),
   });
+  // const onSubmit = (values) => console.log("formik values", values);
 
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      // await createProduct(values).unwrap();
+      // await updateOptions({
+      //   id: productId,
+      //   optionGroupId,
+      //   initialOptions: values,
+      // }).unwrap();
       swalSaveSuccess();
-      navigate("/product");
+      // navigate("/product");
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);

@@ -6,14 +6,15 @@ import FormikControl from "../../../../components/FormUi/FormikControl";
 import MoveDownIcon from "@mui/icons-material/MoveDown";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useGetInventoriesQuery } from "../../../inventory/inventoryApiSlice";
 
-const FormOptions = () => {
-  const dropdownOptions = [
-    { key: "Select a option", value: "" },
-    { key: "Option 1", value: 1 },
-    { key: "Option 2", value: 2 },
-    { key: "Option 3", value: 3 },
-  ];
+const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
+  // const dropdownOptions = [
+  //   { key: "Select a option", value: "" },
+  //   { key: "Option 1", value: 1 },
+  //   { key: "Option 2", value: 2 },
+  //   { key: "Option 3", value: 3 },
+  // ];
   const switchManyRelateHandler = (setValues, values, index) => {
     setValues(() => {
       const options = values.options;
@@ -50,21 +51,38 @@ const FormOptions = () => {
     //   return tmpObj;
     // });
   };
-  const initialValues = {
-    manyRelate: false,
-    showImage: false,
-    options: [],
-  };
-  const validationSchema = Yup.object({
-    // variants: Yup.array()
-    //   .of(Yup.object({ name: Yup.string().required() }))
-    //   .min(1),
-  });
-  const onSubmit = (values) => console.log("formik values", values);
+
+  const { data: inventories, isSuccess } = useGetInventoriesQuery(1, 200);
+
+  const dropdownOptions = isSuccess
+    ? inventories.data.map((inventory) => ({
+        key: inventory.name,
+        value: inventory.id,
+      }))
+    : [];
+  dropdownOptions.unshift({ key: "Select a option", value: "" });
+  // const initialValues = {
+  //   manyRelate: false,
+  //   showImage: false,
+  //   options: [
+  //     {
+  //       name: "",
+  //       price: 0,
+  //       inventoryId: "",
+  //     },
+  //   ],
+  // };
+  // const validationSchema = Yup.object({
+  //   // variants: Yup.array()
+  //   //   .of(Yup.object({ name: Yup.string().required() }))
+  //   //   .min(1),
+  // });
+  // const onSubmit = (values) => console.log("formik values", values);
   return (
     <>
       <Formik
         initialValues={initialValues}
+        enableReinitialize
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
