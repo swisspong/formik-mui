@@ -1,4 +1,7 @@
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
   Box,
   Button,
@@ -26,6 +29,7 @@ import MoveDownIcon from "@mui/icons-material/MoveDown";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link, useParams } from "react-router-dom";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {
   useGetProductByIdQuery,
   useUpdateProductVariantMutation,
@@ -46,7 +50,7 @@ const rows = [
   createData("Cupcake", 305, 3.7, 67, 4.3),
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
-const FormVariantV2 = () => {
+const FormVariantStack = () => {
   const { productId } = useParams();
   const {
     data: product,
@@ -99,7 +103,133 @@ const FormVariantV2 = () => {
             return (
               <Form>
                 <Paper sx={{ p: 2, mb: 3 }} elevation={3}>
-                  <FieldArray
+                  <Stack
+                    direction={{ sm: "column", md: "row" }}
+                    alignItems={{xs:"flex-start",md:"center"}}
+                  >
+                    <Stack
+                      mx={1}
+                      my={2}
+                      p={2}
+                      border={1}
+                      borderRadius={1}
+                      borderColor={"grey.500"}
+                      width={1}
+                    >
+                      <Stack
+                        direction={{ sm: "column", md: "row" }}
+                        alignItems={"center"}
+                      >
+                        <Stack width={1} direction="column">
+                          <Stack direction={"row"}>
+                            <FormikControl
+                              control={"switch"}
+                              //   changeHandler={switchManyRelateHandler}
+                              label={"Many Relate"}
+                            />
+
+                            <FormikControl
+                              control={"switch"}
+                              label={"Show Image"}
+                            />
+                          </Stack>
+                          <FormikControl
+                            control={"input"}
+                            name={`variants.name`}
+                            label={`Name of variant `}
+                            fullWidth
+                          />
+                        </Stack>
+                      </Stack>
+                      <Stack
+                        mx={1}
+                        mb={1}
+                        direction="row"
+                        justifyContent={"space-between"}
+                      >
+                        <Button
+                          variant="contained"
+                          size="small"
+                          component={Link}
+                          to={`/options`}
+                          sx={{ mr: 1 }}
+                        >
+                          Manage Options
+                        </Button>
+                        <Box ml={1}>
+                          <ButtonGroup
+                            size="small"
+                            // sx={{orientation:"vertical"}}
+
+                            aria-label="vertical outlined button group"
+                          >
+                            <Button>
+                              <MoveUpIcon />
+                            </Button>
+                            <Button>
+                              <MoveDownIcon />
+                            </Button>
+                          </ButtonGroup>
+                        </Box>
+                      </Stack>
+                      <Accordion>
+                        <AccordionSummary
+                          expandIcon={<ExpandMoreIcon />}
+                          aria-controls="panel1a-content"
+                          id="panel1a-header"
+                        >
+                          <Stack
+                            direction={"row"}
+                            alignItems={"center"}
+                            spacing={0.5}
+                          >
+                            <Typography>Option List</Typography>
+                            <Chip label="2" color="primary" size="small" />
+                          </Stack>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <TableContainer>
+                            <Table size="small" aria-label="a dense table">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Option</TableCell>
+                                  <TableCell align="right">Price</TableCell>
+                                  <TableCell align="right">Quantity</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {rows.map((row) => (
+                                  <TableRow
+                                    key={row.name}
+                                    sx={{
+                                      "&:last-child td, &:last-child th": {
+                                        border: 0,
+                                      },
+                                    }}
+                                  >
+                                    <TableCell component="th" scope="row">
+                                      {row.name}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.calories}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                      {row.fat}
+                                    </TableCell>
+                                  </TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </AccordionDetails>
+                      </Accordion>
+                    </Stack>
+                    <Button sx={{ml:{xs:1,md:0},width:{xs:1,md:0}}}  variant="outlined" color={"error"}>
+                      <DeleteIcon />
+                    </Button>
+                  </Stack>
+
+                  {/* <FieldArray
                     name="variants"
                     render={(arrayHelpers) => {
                       return (
@@ -225,7 +355,7 @@ const FormVariantV2 = () => {
                         </div>
                       );
                     }}
-                  />
+                  /> */}
                 </Paper>
                 <Paper sx={{ p: 2, mb: 3 }} elevation={3}>
                   <Box m={1}>
@@ -243,4 +373,4 @@ const FormVariantV2 = () => {
   );
 };
 
-export default FormVariantV2;
+export default FormVariantStack;

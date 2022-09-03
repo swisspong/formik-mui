@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import * as Yup from "yup";
@@ -19,21 +19,66 @@ const UpdateOption = () => {
   const { productId, optionGroupId } = useParams();
   const navigate = useNavigate();
 
-  const { data: product, isSuccess } = useGetProductByIdQuery(productId);
-  const { data: inventory, isSuccess: isSuccessInventory } =
-    useGetInventoriesQuery(1, 200);
+  const {
+    data: product,
+    isLoading,
+    isSuccess,
+    isFetching,
+    refetch,
+  } = useGetProductByIdQuery(productId);
+
   const [updateOptions] = useUpdateOptoinsMutation();
-  console.log(productId);
 
   const optionGroup = product?.optionGroupList?.find(
     (optionGroup) => optionGroup.id === Number(optionGroupId)
   );
+  const [initFormik, setInitFormik] = useState({
+    manyRelate: false,
+    showImage: false,
+    options: [
+      {
+        name: "",
+        price: 0,
+        inventoryId: "",
+      },
+    ],
+  });
+  // console.log(optionGroup);
 
-  console.log(optionGroup);
+  useEffect(() => {
+    if (isSuccess && !isLoading) {
+      console.log(product);
+      console.log(initFormik);
+      setInitFormik({
+        manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
+        showImage: false,
+        options: optionGroup?.options
+          ? optionGroup.options.map((option) => ({
+              id: option.id,
+              name: option.name,
+              price: Number(option.price),
+              ...(optionGroup.manyRelate
+                ? {
+                    inventoryIdList: option.optionInventoryList.map(
+                      (optionInventory) => optionInventory.inventory.id
+                    ),
+                  }
+                : { inventoryId: option.optionInventoryList[0].inventory.id }),
+            }))
+          : [
+              {
+                name: "",
+                price: 0,
+                inventoryId: "",
+              },
+            ],
+      });
+    }
+  }, [isSuccess, product]);
 
   const initialValues = {
     // manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
-    manyRelate: false,
+    manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
     showImage: false,
     // options: [
     //   {
@@ -44,11 +89,16 @@ const UpdateOption = () => {
     // ],
     options: optionGroup?.options
       ? optionGroup.options.map((option) => ({
+          id: option.id,
           name: option.name,
           price: Number(option.price),
-          inventoryId: !option.manyRelate
-            ? option.optionInventoryList[0].inventory.id
-            : "",
+          ...(optionGroup.manyRelate
+            ? {
+                inventoryIdList: option.optionInventoryList.map(
+                  (optionInventory) => optionInventory.inventory.id
+                ),
+              }
+            : { inventoryId: option.optionInventoryList[0].inventory.id }),
         }))
       : [
           {
@@ -69,12 +119,14 @@ const UpdateOption = () => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      // await updateOptions({
-      //   id: productId,
-      //   optionGroupId,
-      //   initialOptions: values,
-      // }).unwrap();
+      await updateOptions({
+        id: productId,
+        optionGroupId,
+        initialOptions: values,
+      }).unwrap();
       swalSaveSuccess();
+
+      // refetch();
       // navigate("/product");
     } catch (error) {
       swalCreateFail(error.data.message);
@@ -92,9 +144,9 @@ const UpdateOption = () => {
         } options`}
         backTo={-1}
       />
-      {isSuccess && (
+      {isSuccess && !isLoading && (
         <FormOptions
-          initialValues={initialValues}
+          initialValues={initFormik}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
         />

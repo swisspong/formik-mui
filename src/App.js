@@ -55,6 +55,8 @@ import EditProduct from "./features/product/EditProduct";
 import ViewProduct from "./features/product/ViewProduct";
 import UpsertVariant from "./features/product/variants/UpsertVariant";
 import UpdateOption from "./features/product/variants/options/UpdateOptions";
+import Layout2 from "./components/Layout2";
+import LayoutNew from "./components/LayoutNew";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -143,7 +145,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<SignIn />} />
-        <Route path="/" element={<Layout />}>
+        <Route path="/" element={<LayoutNew />}>
           <Route path="category">
             <Route index element={<CategoryTable />} />
             <Route path="create" element={<CreateCategory />} />

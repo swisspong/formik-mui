@@ -82,18 +82,33 @@ const CategoryTable = () => {
         labelBtn={"Create new +"}
         to="create"
       />
-      <TableContainer component={Paper}>
-        <DataTable
-          columns={columns(deleteCategory)}
-          data={isSuccess ? categories.data : []}
-          progressPending={isLoading}
-          onChangePage={changePageHandler}
-          onChangeRowsPerPage={rowsPerPageHandler}
-          pagination
-          paginationServer
-          paginationTotalRows={isSuccess && categories.total}
-        />
-      </TableContainer>
+      <DataTable
+            columns={columns(deleteCategory)}
+            data={isSuccess ? categories.data : []}
+            progressPending={isLoading}
+            onChangePage={changePageHandler}
+            onChangeRowsPerPage={rowsPerPageHandler}
+            pagination
+            paginationServer
+            paginationTotalRows={isSuccess && categories.total}
+            responsive
+          />
+      {/* <Box display={"flex"} width={1} flexShrink={1}>
+        <Box width={1}>
+          <DataTable
+            columns={columns(deleteCategory)}
+            data={isSuccess ? categories.data : []}
+            progressPending={isLoading}
+            onChangePage={changePageHandler}
+            onChangeRowsPerPage={rowsPerPageHandler}
+            pagination
+            paginationServer
+            paginationTotalRows={isSuccess && categories.total}
+            responsive
+          />
+        </Box>
+      </Box> */}
+      {/* <TableContainer component={Paper}></TableContainer> */}
     </>
   );
 };
