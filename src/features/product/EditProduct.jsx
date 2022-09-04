@@ -15,6 +15,7 @@ import {
   useCreateProductMutation,
   useGetProductByIdQuery,
 } from "./productApiSlice";
+import FormProductEdit from "./FormProductEdit";
 const EditProduct = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
@@ -56,7 +57,7 @@ const EditProduct = () => {
     <>
       <HeadingCrud label={"Update product"} backTo={-1} />
       {isSuccess && (
-        <FormProduct2
+        <FormProductEdit
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import * as Yup from "yup";
@@ -15,36 +15,25 @@ import {
   swalSaveSuccess,
 } from "../../../utils/sweetAlertUtil";
 import FormVariantV2 from "./FormVariantV2";
-import {
-  Box,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import DataTable from "react-data-table-component";
+
 import FormVariantStack from "./FormVariantStack";
+import { useEffect } from "react";
 const UpsertVariant = () => {
   const { productId } = useParams();
+  const [initFormik, setInitFormik] = useState();
   const navigate = useNavigate();
-
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-
-  const rows = [
-    createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-    createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-    createData("Eclair", 262, 16.0, 24, 6.0),
-    createData("Cupcake", 305, 3.7, 67, 4.3),
-    createData("Gingerbread", 356, 16.0, 49, 3.9),
-  ];
 
   const [createProduct] = useCreateProductMutation();
   const { data: product, isSuccess } = useGetProductByIdQuery(productId);
+
+  // useEffect(() => {
+  //   const optionGroupHandler = () => {
+  //     setInitFormik({ id: 2 });
+  //   };
+  //   if (isSuccess) {
+  //     optionGroupHandler();
+  //   }
+  // }, [isSuccess, product]);
   console.log(productId);
   const initialValues = {
     variants: product?.optionGroupList,
@@ -122,7 +111,6 @@ const UpsertVariant = () => {
           ))}
         </TableBody>
       </Table> */}
-     
     </>
   );
 };
