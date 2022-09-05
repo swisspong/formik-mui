@@ -1,10 +1,11 @@
 import { Autocomplete, Box, Chip, TextField } from "@mui/material";
 import { getIn, useField, useFormikContext } from "formik";
-import React from "react";
+import React, { useState } from "react";
 
 const TagsInput = ({ name, placeholder }) => {
   //   const [field, meta] = useField(name);
   const { setFieldValue, values } = useFormikContext();
+  const [defaultData,setDefaultData] = useState(getIn(values, name).map(({ name }) => name))
   //   const onChange = (e) => {
   //     setFieldValue(name, [...getIn(values, name), e.target.value]);
   //   };
@@ -43,11 +44,21 @@ const TagsInput = ({ name, placeholder }) => {
         multiple
         id="tags-outlined"
         options={[]}
-        defaultValue={[]}
+        defaultValue={defaultData}
         freeSolo
         name={name}
         //   autoSelect
-        onChange={(event, value) => setFieldValue(name, value)}
+        onChange={(event, value) => {
+          const oldDataFiltered = getIn(values, name).filter((item) => {
+            return value.find((val) => item.name === val) ? true : false;
+          });
+          const newDataFitlered = value
+            .filter((val) =>
+              oldDataFiltered.find((item) => item.name === val) ? false : true
+            )
+            .map((val) => ({ id: null, name: val }));
+          setFieldValue(name, [...oldDataFiltered, ...newDataFitlered]);
+        }}
         renderInput={(params) => (
           <TextField
             //   {...field}

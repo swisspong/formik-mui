@@ -43,6 +43,10 @@ import {
   swalLoadingNew,
   swalSaveSuccess,
 } from "../../../utils/sweetAlertUtil";
+import {
+  useGetOptionGroupByProductIdQuery,
+  useUpdateOptionGroupListByPrdouctIdMutation,
+} from "./optionGroupApiSlice";
 function createData(name, calories, fat, carbs, protein, price) {
   return {
     name,
@@ -153,24 +157,41 @@ const rows = [
 ];
 const FormVariantStack = () => {
   const { productId } = useParams();
+  // const {
+  //   data: product,
+  //   isLoading,
+  //   isSuccess,
+  // } = useGetProductByIdQuery(productId);
+  const [updateProductVariant] = useUpdateProductVariantMutation();
+  const [updateOptionGropuList] = useUpdateOptionGroupListByPrdouctIdMutation();
   const {
-    data: product,
+    data: optionGroupList = [],
     isLoading,
     isSuccess,
-  } = useGetProductByIdQuery(productId);
-  const [updateProductVariant] = useUpdateProductVariantMutation();
-  console.log(product);
+  } = useGetOptionGroupByProductIdQuery({
+    productId,
+  });
+
+  console.log(optionGroupList);
 
   const initialValues = {
-    variants: product?.optionGroupList
-      ? product.optionGroupList.map((optionGroup) => ({
-          id: optionGroup.id,
-          name: optionGroup.name,
-          manyRelate: optionGroup.manyRelate,
-          options:[]
-        }))
-      : [],
+    variants: optionGroupList?.map((optionGroup) => ({
+      id: optionGroup.id,
+      name: optionGroup.name,
+      manyRelate: optionGroup.manyRelate,
+      options: optionGroup.options.map(({ id, name }) => ({ id, name })),
+    })),
   };
+  // const initialValues = {
+  //   variants: product?.optionGroupList
+  //     ? product.optionGroupList.map((optionGroup) => ({
+  //         id: optionGroup.id,
+  //         name: optionGroup.name,
+  //         manyRelate: optionGroup.manyRelate,
+  //         options: [],
+  //       }))
+  //     : [],
+  // };
   const validationSchema = Yup.object({
     // variants: Yup.array()
     //   .of(Yup.object({ name: Yup.string().required() }))
@@ -180,13 +201,13 @@ const FormVariantStack = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      swalLoadingNew();
+      // swalLoadingNew();
       // await updateProductVariant({
       //   id: productId,
       //   initialInventory: values,
       // }).unwrap();
-      swalSaveSuccess();
-      console.log(product, isLoading);
+      // swalSaveSuccess();
+      // console.log(product, isLoading);
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);
@@ -242,8 +263,12 @@ const FormVariantStack = () => {
                                           label={"Show Image"}
                                         /> */}
                                       </Stack>
-                                      <Stack direction="row" width={1} alignItems="flex-start">
-                                        <Box width={1/2}>
+                                      <Stack
+                                        direction="row"
+                                        width={1}
+                                        alignItems="flex-start"
+                                      >
+                                        <Box width={1 / 2}>
                                           <FormikControl
                                             control={"input"}
                                             name={`variants.${index}.name`}
@@ -259,7 +284,6 @@ const FormVariantStack = () => {
                                             fullWidth
                                           />
                                         </Box>
-                                    
                                       </Stack>
                                     </Stack>
                                   </Stack>
@@ -292,7 +316,7 @@ const FormVariantStack = () => {
                                       </ButtonGroup>
                                     </Box>
                                   </Stack>
-                                  <Accordion>
+                                  {/* <Accordion>
                                     <AccordionSummary
                                       expandIcon={<ExpandMoreIcon />}
                                       aria-controls="panel1a-content"
@@ -336,7 +360,7 @@ const FormVariantStack = () => {
                                         </Table>
                                       </TableContainer>
                                     </AccordionDetails>
-                                  </Accordion>
+                                  </Accordion> */}
                                 </Stack>
                                 <Button
                                   sx={{

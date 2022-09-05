@@ -133,7 +133,7 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                             flexGrow={1}
                                           >
                                             <Grid container spacing={0}>
-                                              <Grid item xs={6}>
+                                              <Grid item xs={4}>
                                                 <FormikControl
                                                   control={"input"}
                                                   name={`options.${index}.name`}
@@ -143,7 +143,7 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                   fullWidth
                                                 />
                                               </Grid>
-                                              <Grid item xs={6}>
+                                              <Grid item xs={2}>
                                                 <FormikControl
                                                   control={"input"}
                                                   name={`options.${index}.price`}
@@ -154,7 +154,7 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                   fullWidth
                                                 />
                                               </Grid>
-                                              <Grid item xs={12}>
+                                              <Grid item xs={6}>
                                                 {formik.values.manyRelate ? (
                                                   <FormikControl
                                                     control={"multipleSelect"}
