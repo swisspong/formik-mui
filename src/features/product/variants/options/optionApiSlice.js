@@ -16,14 +16,15 @@ export const extendApiSlice = apiSlice.injectEndpoints({
       ],
     }),
     updateOptoinListByProductIdAndOptionGroupId: builder.mutation({
-      query: ({ productId, optionGroupId, initialOptions }) => ({
+      query: ({ productId, optionGroupId, body }) => ({
         url: `product/${productId}/variants/${optionGroupId}/options`,
         method: "PUT",
         body: {
-          ...initialOptions,
+          ...body,
         },
       }),
       invalidatesTags: (result, error, arg) => [
+        { type: "OptionGroup", id: arg.productId },
         { type: "Option", id: arg.optionGroupId },
       ],
     }),

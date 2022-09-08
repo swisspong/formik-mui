@@ -2,6 +2,7 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
+  Alert,
   Avatar,
   Box,
   Button,
@@ -157,12 +158,7 @@ const rows = [
 ];
 const FormVariantStack = () => {
   const { productId } = useParams();
-  // const {
-  //   data: product,
-  //   isLoading,
-  //   isSuccess,
-  // } = useGetProductByIdQuery(productId);
-  const [updateProductVariant] = useUpdateProductVariantMutation();
+
   const [updateOptionGropuList] = useUpdateOptionGroupListByPrdouctIdMutation();
   const {
     data: optionGroupList = [],
@@ -182,16 +178,7 @@ const FormVariantStack = () => {
       options: optionGroup.options.map(({ id, name }) => ({ id, name })),
     })),
   };
-  // const initialValues = {
-  //   variants: product?.optionGroupList
-  //     ? product.optionGroupList.map((optionGroup) => ({
-  //         id: optionGroup.id,
-  //         name: optionGroup.name,
-  //         manyRelate: optionGroup.manyRelate,
-  //         options: [],
-  //       }))
-  //     : [],
-  // };
+
   const validationSchema = Yup.object({
     // variants: Yup.array()
     //   .of(Yup.object({ name: Yup.string().required() }))
@@ -202,12 +189,8 @@ const FormVariantStack = () => {
     try {
       console.log("formik values", values);
       // swalLoadingNew();
-      // await updateProductVariant({
-      //   id: productId,
-      //   initialInventory: values,
-      // }).unwrap();
+      // await updateOptionGropuList({ productId, body: values }).unwrap();
       // swalSaveSuccess();
-      // console.log(product, isLoading);
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);
@@ -215,7 +198,7 @@ const FormVariantStack = () => {
   };
   return (
     <>
-      {isSuccess && (
+      {isSuccess && !isLoading && (
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -245,6 +228,7 @@ const FormVariantStack = () => {
                                   borderRadius={1}
                                   borderColor={"grey.500"}
                                   width={1}
+                                  sx={{ position: "relative" }}
                                 >
                                   <Stack
                                     direction={{ sm: "column", md: "row" }}
@@ -302,6 +286,7 @@ const FormVariantStack = () => {
                                     >
                                       Manage Options
                                     </Button>
+
                                     <Box ml={1}>
                                       <ButtonGroup
                                         size="small"
@@ -361,6 +346,29 @@ const FormVariantStack = () => {
                                       </TableContainer>
                                     </AccordionDetails>
                                   </Accordion> */}
+                                  {!optionGroupList
+                                    .find(
+                                      (optionGroup) =>
+                                        optionGroup.id ===
+                                        formik.values.variants[index].id
+                                    )
+                                    .options.every(
+                                      (option) =>
+                                        option.optionInventoryList.length > 0
+                                    ) && (
+                                    <Alert
+                                      variant="filled"
+                                      severity="warning"
+                                      sx={{
+                                        position: "absolute",
+                                        top: "0",
+                                        left: "50%",
+                                        transform: "translate(-50%,-60%)",
+                                      }}
+                                    >
+                                      You must be provide options
+                                    </Alert>
+                                  )}
                                 </Stack>
                                 <Button
                                   sx={{

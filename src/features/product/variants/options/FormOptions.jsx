@@ -23,7 +23,7 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
         ...values,
         manyRelate: !values.manyRelate,
         options: options.map((option) => ({
-          ...(!values.manyRelate
+          ...(!values?.manyRelate
             ? { name: option.name, price: option.price, inventoryIdList: [] }
             : { name: option.name, price: option.price, inventoryId: "" }),
         })),
