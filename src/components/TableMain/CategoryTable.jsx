@@ -1,4 +1,4 @@
-import { Box, IconButton, Paper, TableContainer } from "@mui/material";
+import { Avatar, Box, IconButton, Paper, TableContainer } from "@mui/material";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import EditIcon from "@mui/icons-material/Edit";
@@ -12,6 +12,7 @@ import {
 import HeadingCrud from "../HeadingCrud";
 import CustomizedMenus from "../CustomizeMenus";
 import { formatDate } from "../../utils/formatDate";
+import { deepOrange } from "@mui/material/colors";
 const columns = (deleteHandler) => [
   {
     name: "#",
@@ -19,6 +20,13 @@ const columns = (deleteHandler) => [
     sortable: true,
     sortField: "id",
   },
+  {
+    name: "image",
+    cell: (row) => {
+      return <Avatar variant="square" src={row.image.path}  sx={{ width: 56, height: 56 }} />;
+    },
+  },
+
   {
     name: "parent category",
     selector: (row) => row.breadcrumbs,
@@ -83,16 +91,16 @@ const CategoryTable = () => {
         to="create"
       />
       <DataTable
-            columns={columns(deleteCategory)}
-            data={isSuccess ? categories.data : []}
-            progressPending={isLoading}
-            onChangePage={changePageHandler}
-            onChangeRowsPerPage={rowsPerPageHandler}
-            pagination
-            paginationServer
-            paginationTotalRows={isSuccess && categories.total}
-            responsive
-          />
+        columns={columns(deleteCategory)}
+        data={isSuccess ? categories.data : []}
+        progressPending={isLoading}
+        onChangePage={changePageHandler}
+        onChangeRowsPerPage={rowsPerPageHandler}
+        pagination
+        paginationServer
+        paginationTotalRows={isSuccess && categories.total}
+        responsive
+      />
       {/* <Box display={"flex"} width={1} flexShrink={1}>
         <Box width={1}>
           <DataTable

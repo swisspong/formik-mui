@@ -17,6 +17,7 @@ const FormCategory2 = ({
   validationSchema,
   onSubmit,
   dropdownOptions,
+  initUrl = null,
 }) => {
   return (
     <>
@@ -38,7 +39,6 @@ const FormCategory2 = ({
                 />
                 <FormikControl
                   control={"input"}
-              
                   name={"name"}
                   label={"Category name"}
                   fullWidth
@@ -47,7 +47,8 @@ const FormCategory2 = ({
                 <FormikControl
                   control={"image"}
                   label={"upload image"}
-                  name={"image"}
+                  name={"asset"}
+                  initUrl={initUrl}
                 />
 
                 <FormikControl

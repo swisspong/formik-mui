@@ -37,7 +37,7 @@ const CreateCategory = () => {
   const initialValues = {
     parentId: "",
     name: "",
-    // image: "",
+    asset: "",
     // allow: false,
   };
 

@@ -21,9 +21,6 @@ const EditCategory = () => {
   const { categoryId } = useParams();
   console.log(categoryId);
   const navigate = useNavigate();
-  // const category = useSelector((state) =>
-  //   selectCategoryById(state, Number(categoryId))
-  // );
   const { data: category, isSuccess: isSuccessCategory } =
     useGetCategoryByIdQuery(categoryId);
   const [updateCategory] = useUpdateCategoryMutation();
@@ -34,7 +31,7 @@ const EditCategory = () => {
     isSuccess,
     error,
   } = useGetCategoriesQuery(1, 200);
-
+  console.log(category)
   const dropdownOptions2 = isSuccess
     ? categories.data.map((category) => ({
         key: category.name,
@@ -45,6 +42,7 @@ const EditCategory = () => {
   const initialValues = {
     parentId: category?.parentId ? category.parentId : "",
     name: category?.name,
+    asset: category?.imageId || "",
   };
 
   const validationSchema = Yup.object({
@@ -76,6 +74,7 @@ const EditCategory = () => {
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
+          initUrl={category?.image?.path}
         />
       )}
     </>
