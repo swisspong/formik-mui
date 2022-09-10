@@ -9,31 +9,89 @@ const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
   const [field, meta] = useField(name);
   const [image, setImage] = useState(null);
   const [url, setUrl] = useState(initUrl);
+  const [isUploading, setIsUploading] = useState(null);
   const [createCategoryImage, { isLoading }] = useCreateCategoryImageMutation();
   const { setFieldValue, values } = useFormikContext();
   const changeHandler = (e) => {
     if (multiple) {
       const files = Array.from(e.target.files).map((file) => file);
+      const promises = [];
+      let initUploading = [];
+      for (let i = 0; i < files.length; i++) {
+        initUploading.push(false);
+      }
+      setIsUploading(initUploading);
+      console.log(isUploading);
+      for (let i = 0; i < files.length; i++) {
+        var formData = new FormData();
+        formData.append("asset", files[i]);
+        promises.push(
+          createCategoryImage(formData)
+            .unwrap()
+            .then((res) => {
+              setIsUploading((prevState) => {
+                const tmp = prevState;
+                tmp[i] = true;
+                return tmp;
+              });
+              console.log(isLoading);
+              return res;
+              // const tmp = getIn(values, name);
+              // setFieldValue(name, res.result.id);
+              // setUrl(res.result.path);
+              // setImage(null);
+            })
+            .catch((err) => console.log(err))
+        );
+      }
+
+      Promise.all(promises).then((res) => {
+        console.log(res);
+        setFieldValue(
+          name,
+          res.map((result) => result.result.id)
+        );
+        setUrl(res.map((result) => result.result.path));
+        setImage(null);
+        // setFieldValue(name, res.result.id);
+        // setUrl(res.result.path);
+        // setImage(null);
+      });
+      console.log(isUploading);
+      setImage(files);
       setFieldValue(name, files);
     } else {
-      setUrl(null);
-      setImage(null);
-      console.log(e.target.files[0]);
-      var formData = new FormData();
-      formData.append("asset", e.target.files[0]);
-      createCategoryImage(formData)
-        .unwrap()
-        .then((res) => {
-          setFieldValue(name, res.result.id);
-          setUrl(res.result.path);
-        })
-        .catch((err) => console.log(err));
-      setImage(e.target.files[0]);
+      if (e.target.files[0]) {
+        setUrl(null);
+        setImage(null);
+
+        var formData = new FormData();
+        formData.append("asset", e.target.files[0]);
+        createCategoryImage(formData)
+          .unwrap()
+          .then((res) => {
+            setFieldValue(name, res.result.id);
+            setUrl(res.result.path);
+            setImage(null);
+          })
+          .catch((err) => console.log(err));
+        setImage(e.target.files[0]);
+      }
       // setFieldValue(name, e.target.files[0]);
     }
   };
-  const deleteHandler = () => {
+  const deleteHandler = (index) => {
     if (multiple) {
+      const tmp = getIn(values, name);
+      tmp.splice(index, 1);
+      setFieldValue(name, tmp);
+      setUrl((prevState) => {
+        const tmp = prevState;
+        tmp.splice(index, 1);
+        console.log(tmp);
+        return tmp;
+      });
+      setImage(null);
     } else {
       setFieldValue(name, "");
       setImage(null);
@@ -88,9 +146,22 @@ const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
             {(image || url) && (
               <Box flexGrow={1} display={"flex"} gap={1} flexWrap="wrap">
                 {multiple ? (
-                  getIn(values, name).map((file) => (
-                    <PreviewImage file={file} />
-                  ))
+                  // getIn(values, name).map((file) => (
+                  //   <PreviewImage file={file} />
+                  // ))
+                  Array.isArray(image) ? (
+                    image.map((file, index) => (
+                      <PreviewImage file={file} isLoading={isLoading} />
+                    ))
+                  ) : (
+                    url.map((url, index) => (
+                      <PreviewImage
+                        url={url}
+                        isLoading={isLoading}
+                        deleteHandler={() => deleteHandler(index)}
+                      />
+                    ))
+                  )
                 ) : (
                   <PreviewImage
                     deleteHandler={deleteHandler}

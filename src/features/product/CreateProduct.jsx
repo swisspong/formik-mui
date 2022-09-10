@@ -24,6 +24,7 @@ const CreateProduct = () => {
     availableStock: 0,
     price: 0.0,
     description: "",
+    asset:[]
   };
   const validationSchema = Yup.object({
     // categoryId: Yup.string().required(),
@@ -37,10 +38,10 @@ const CreateProduct = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      swalLoadingNew();
-      await createProduct(values).unwrap();
-      swalSaveSuccess();
-      navigate("/product");
+      // swalLoadingNew();
+      // await createProduct(values).unwrap();
+      // swalSaveSuccess();
+      // navigate("/product");
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);

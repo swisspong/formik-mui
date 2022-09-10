@@ -3,7 +3,12 @@ import { Form, Formik } from "formik";
 import React from "react";
 import FormikControl from "../../components/FormUi/FormikControl";
 
-const FormInventory2 = ({ initialValues, validationSchema, onSubmit }) => {
+const FormInventory2 = ({
+  initialValues,
+  validationSchema,
+  onSubmit,
+  initUrl = null,
+}) => {
   return (
     <Paper sx={{ p: 2 }}>
       <Formik
@@ -38,7 +43,8 @@ const FormInventory2 = ({ initialValues, validationSchema, onSubmit }) => {
               <FormikControl
                 control={"image"}
                 label={"upload image"}
-                name={"image"}
+                name={"asset"}
+                initUrl={initUrl}
               />
               <Box m={1}>
                 <Button type="submit" variant="contained">

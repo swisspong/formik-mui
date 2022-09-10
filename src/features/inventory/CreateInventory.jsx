@@ -18,9 +18,9 @@ const CreateInventory = () => {
 
   const initialValues = {
     name: "",
-    
     cost: 0,
     quantity: 0,
+    asset:""
   };
 
   const validationSchema = Yup.object({});

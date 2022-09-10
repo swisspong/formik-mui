@@ -1,4 +1,4 @@
-import { Box, Paper, TableContainer } from "@mui/material";
+import { Avatar, Box, Paper, TableContainer } from "@mui/material";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import {
@@ -16,7 +16,18 @@ const columns = (deleteHandler) => [
     sortable: true,
     sortField: "id",
   },
-
+  {
+    name: "image",
+    cell: (row) => {
+      return (
+        <Avatar
+          variant="square"
+          src={row.image.path}
+          sx={{ width: 56, height: 56 }}
+        />
+      );
+    },
+  },
   {
     name: "inventory name",
     selector: (row) => row.name,

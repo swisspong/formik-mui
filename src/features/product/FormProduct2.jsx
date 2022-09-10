@@ -101,7 +101,7 @@ const FormProduct2 = ({
                   <FormikControl
                     control={"image"}
                     label={"upload image(s)"}
-                    name={"file"}
+                    name={"asset"}
                     multiple
                   />
                 </Paper>

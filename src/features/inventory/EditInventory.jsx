@@ -30,6 +30,7 @@ const EditInventory = () => {
     name: inventory?.name,
     cost: inventory?.costPrice,
     quantity: inventory?.quantity,
+    asset: inventory?.imageId || "",
   };
 
   const validationSchema = Yup.object({
@@ -61,6 +62,7 @@ const EditInventory = () => {
           initialValues={initialValues}
           onSubmit={onSubmit}
           validationSchema={validationSchema}
+          initUrl={inventory?.image?.path}
         />
       )}
     </>

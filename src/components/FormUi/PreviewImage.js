@@ -10,6 +10,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 const PreviewImage = ({ file, isLoading = false, url, deleteHandler }) => {
   const [preview, setPreview] = useState(null);
   const reader = new FileReader();
+
   if (file) {
     reader.readAsDataURL(file);
     reader.onload = () => {
