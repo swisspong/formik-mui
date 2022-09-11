@@ -39,11 +39,11 @@ export const extendApiSlice = apiSlice.injectEndpoints({
       invalidatesTags: [{ type: "Product", id: "LIST" }],
     }),
     updateProduct: builder.mutation({
-      query: ({ id, initialInventory }) => ({
+      query: ({ id, body }) => ({
         url: `product/${id}`,
         method: "PUT",
         body: {
-          ...initialInventory,
+          ...body,
         },
       }),
       invalidatesTags: (result, error, arg) => [

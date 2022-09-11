@@ -34,6 +34,7 @@ const FormProductEdit = ({
   validationSchema,
   onSubmit,
   edit = false,
+  initUrl = null,
 }) => {
   const { productId } = useParams();
   const [tags, setTags] = useState([]);
@@ -134,7 +135,8 @@ const FormProductEdit = ({
                   <FormikControl
                     control={"image"}
                     label={"upload image(s)"}
-                    name={"file"}
+                    name={"asset"}
+                    initUrl={initUrl}
                     multiple
                   />
                 </Paper>

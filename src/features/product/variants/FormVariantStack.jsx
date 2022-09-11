@@ -188,9 +188,9 @@ const FormVariantStack = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      // swalLoadingNew();
-      // await updateOptionGropuList({ productId, body: values }).unwrap();
-      // swalSaveSuccess();
+      swalLoadingNew();
+      await updateOptionGropuList({ productId, body: values }).unwrap();
+      swalSaveSuccess();
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);
@@ -346,29 +346,54 @@ const FormVariantStack = () => {
                                       </TableContainer>
                                     </AccordionDetails>
                                   </Accordion> */}
-                                  {!optionGroupList
-                                    .find(
-                                      (optionGroup) =>
-                                        optionGroup.id ===
-                                        formik.values.variants[index].id
-                                    )
-                                    .options.every(
-                                      (option) =>
-                                        option.optionInventoryList.length > 0
-                                    ) && (
-                                    <Alert
-                                      variant="filled"
-                                      severity="warning"
-                                      sx={{
-                                        position: "absolute",
-                                        top: "0",
-                                        left: "50%",
-                                        transform: "translate(-50%,-60%)",
-                                      }}
-                                    >
-                                      You must be provide options
-                                    </Alert>
-                                  )}
+                                  {/* {optionGroupList.length > 0 &&
+                                    !optionGroupList
+                                      ?.find(
+                                        (optionGroup) =>
+                                          optionGroup.id ===
+                                          formik.values.variants[index].id
+                                      )
+                                      ?.options.every(
+                                        (option) =>
+                                          option.optionInventoryList.length > 0
+                                      ) && (
+                                      <Alert
+                                        variant="filled"
+                                        severity="warning"
+                                        sx={{
+                                          position: "absolute",
+                                          top: "0",
+                                          left: "50%",
+                                          transform: "translate(-50%,-60%)",
+                                        }}
+                                      >
+                                        You must be provide options
+                                      </Alert>
+                                    )} */}
+                                  {optionGroupList[index] &&
+                                    !optionGroupList
+                                      ?.find(
+                                        (optionGroup) =>
+                                          optionGroup.id ===
+                                          formik.values.variants[index].id
+                                      )
+                                      ?.options.every(
+                                        (option) =>
+                                          option.optionInventoryList.length > 0
+                                      ) && (
+                                      <Alert
+                                        variant="filled"
+                                        severity="warning"
+                                        sx={{
+                                          position: "absolute",
+                                          top: "0",
+                                          left: "50%",
+                                          transform: "translate(-50%,-60%)",
+                                        }}
+                                      >
+                                        You must be provide options
+                                      </Alert>
+                                    )}
                                 </Stack>
                                 <Button
                                   sx={{
@@ -520,6 +545,7 @@ const FormVariantStack = () => {
                                 manyRelate: false,
                                 name: "",
                                 defaultOption: "",
+                                options: [],
                               })
                             }
                           >

@@ -1,4 +1,4 @@
-import { Paper, TableContainer } from "@mui/material";
+import { Avatar, Paper, TableContainer } from "@mui/material";
 import React from "react";
 import DataTable from "react-data-table-component";
 import HeadingCrud from "../HeadingCrud";
@@ -8,6 +8,18 @@ const columns = [
     selector: (row) => row.id,
     sortable: true,
     sortField: "id",
+  },
+  {
+    name: "image",
+    cell: (row) => {
+      return (
+        <Avatar
+          variant="square"
+          src={row.productImage[0].image.path}
+          sx={{ width: 56, height: 56 }}
+        />
+      );
+    },
   },
   {
     name: "ชื่อของหน้า",

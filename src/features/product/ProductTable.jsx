@@ -1,10 +1,13 @@
-import { Box, Paper, TableContainer } from "@mui/material";
+import { Avatar, AvatarGroup, Box, Paper, TableContainer } from "@mui/material";
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import CustomizedMenus from "../../components/CustomizeMenus";
 import HeadingCrud from "../../components/HeadingCrud";
 import { formatDate } from "../../utils/formatDate";
-import { useDeleteInventoryMutation, useGetInventoriesQuery } from "../inventory/inventoryApiSlice";
+import {
+  useDeleteInventoryMutation,
+  useGetInventoriesQuery,
+} from "../inventory/inventoryApiSlice";
 import { useGetProductsQuery } from "./productApiSlice";
 // import {
 //   useDeleteInventoryMutation,
@@ -21,7 +24,21 @@ const columns = (deleteHandler) => [
     sortable: true,
     sortField: "id",
   },
-
+  {
+    name: "image",
+    cell: (row) => {
+      return (
+        <AvatarGroup max={3}>
+          {row.productImage.map((item) => (
+            <Avatar
+              src={item.image.path}
+              // sx={{ width: 56, height: 56 }}
+            />
+          ))}
+        </AvatarGroup>
+      );
+    },
+  },
   {
     name: "Product name",
     selector: (row) => row.name,

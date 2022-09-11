@@ -12,24 +12,25 @@ import {
 
 import FormProduct2 from "./FormProduct2";
 import {
-  useCreateProductMutation,
   useGetProductByIdQuery,
+  useUpdateProductMutation,
 } from "./productApiSlice";
 import FormProductEdit from "./FormProductEdit";
 const EditProduct = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
 
-  const [createProduct] = useCreateProductMutation();
+  const [updateProduct] = useUpdateProductMutation();
   const { data: product, isSuccess } = useGetProductByIdQuery(productId);
-  console.log(productId)
+  console.log(productId);
   const initialValues = {
     categoryId: product?.categoryId,
     inventoryId: product?.inventoryId,
     name: product?.name,
-    availableStock: product?.availableStock,  
+    availableStock: product?.availableStock,
     price: Number(product?.price).toFixed(2),
     description: product?.description,
+    asset: product?.productImage?.map((item) => item.imageId) || [],
   };
   const validationSchema = Yup.object({
     // categoryId: Yup.string().required(),
@@ -44,7 +45,7 @@ const EditProduct = () => {
     try {
       console.log("formik values", values);
       swalLoadingNew();
-      await createProduct(values).unwrap();
+      await updateProduct({ id: productId, body: values }).unwrap();
       swalSaveSuccess();
       navigate("/product");
     } catch (error) {
@@ -62,6 +63,7 @@ const EditProduct = () => {
           onSubmit={onSubmit}
           validationSchema={validationSchema}
           edit={true}
+          initUrl={product?.productImage.map((item) => item?.image?.path)}
         />
       )}
     </>

@@ -38,10 +38,10 @@ const CreateProduct = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      // swalLoadingNew();
-      // await createProduct(values).unwrap();
-      // swalSaveSuccess();
-      // navigate("/product");
+      swalLoadingNew();
+      await createProduct(values).unwrap();
+      swalSaveSuccess();
+      navigate("/product");
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);

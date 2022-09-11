@@ -8,58 +8,55 @@ import { useCreateCategoryImageMutation } from "../../features/categorySlice";
 const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
   const [field, meta] = useField(name);
   const [image, setImage] = useState(null);
-  const [url, setUrl] = useState(initUrl);
+  console.log(initUrl);
+  const [url, setUrl] = useState(
+    initUrl ? (multiple ? (initUrl ? initUrl : []) : []) : null
+  );
+  console.log(url);
   const [isUploading, setIsUploading] = useState(null);
   const [createCategoryImage, { isLoading }] = useCreateCategoryImageMutation();
   const { setFieldValue, values } = useFormikContext();
   const changeHandler = (e) => {
     if (multiple) {
-      const files = Array.from(e.target.files).map((file) => file);
-      const promises = [];
-      let initUploading = [];
-      for (let i = 0; i < files.length; i++) {
-        initUploading.push(false);
-      }
-      setIsUploading(initUploading);
-      console.log(isUploading);
-      for (let i = 0; i < files.length; i++) {
-        var formData = new FormData();
-        formData.append("asset", files[i]);
-        promises.push(
-          createCategoryImage(formData)
-            .unwrap()
-            .then((res) => {
-              setIsUploading((prevState) => {
-                const tmp = prevState;
-                tmp[i] = true;
-                return tmp;
-              });
-              console.log(isLoading);
-              return res;
-              // const tmp = getIn(values, name);
-              // setFieldValue(name, res.result.id);
-              // setUrl(res.result.path);
-              // setImage(null);
-            })
-            .catch((err) => console.log(err))
-        );
-      }
+      if (e.target.files[0]) {
+        const files = Array.from(e.target.files).map((file) => file);
+        const promises = [];
+        let initUploading = [];
+        for (let i = 0; i < files.length; i++) {
+          initUploading.push(false);
+        }
+        setIsUploading(initUploading);
+        console.log(isUploading);
+        for (let i = 0; i < files.length; i++) {
+          var formData = new FormData();
+          formData.append("asset", files[i]);
+          promises.push(
+            createCategoryImage(formData)
+              .unwrap()
+              .then((res) => {
+                return res;
+              })
+              .catch((err) => console.log(err))
+          );
+        }
 
-      Promise.all(promises).then((res) => {
-        console.log(res);
-        setFieldValue(
-          name,
-          res.map((result) => result.result.id)
-        );
-        setUrl(res.map((result) => result.result.path));
-        setImage(null);
-        // setFieldValue(name, res.result.id);
-        // setUrl(res.result.path);
-        // setImage(null);
-      });
-      console.log(isUploading);
-      setImage(files);
-      setFieldValue(name, files);
+        Promise.all(promises).then((res) => {
+          console.log(getIn(values, name));
+          console.log(res.map((result) => result.result.id));
+          setFieldValue(name, [
+            ...getIn(values, name),
+            ...res.map((result) => result.result.id),
+          ]);
+          console.log(res.map((result) => result.result.path));
+          setUrl((prevState) => {
+            return [...prevState, ...res.map((result) => result.result.path)];
+          });
+          setImage(null);
+        });
+
+        setImage(files);
+        //setFieldValue(name, files);
+      }
     } else {
       if (e.target.files[0]) {
         setUrl(null);
@@ -148,20 +145,37 @@ const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
                 {multiple ? (
                   // getIn(values, name).map((file) => (
                   //   <PreviewImage file={file} />
-                  // ))
-                  Array.isArray(image) ? (
-                    image.map((file, index) => (
-                      <PreviewImage file={file} isLoading={isLoading} />
-                    ))
-                  ) : (
-                    url.map((url, index) => (
-                      <PreviewImage
-                        url={url}
-                        isLoading={isLoading}
-                        deleteHandler={() => deleteHandler(index)}
-                      />
-                    ))
-                  )
+                  // )
+                  <>
+                    {Array.isArray(url) &&
+                      url.map((urlItem, index) => {
+                        return (
+                          <PreviewImage
+                            url={urlItem}
+                            // isLoading={isLoading}
+                            deleteHandler={() => deleteHandler(index)}
+                          />
+                        );
+                      })}
+                    {Array.isArray(image) &&
+                      image.map((file, index) => (
+                        <PreviewImage file={file} isLoading={isLoading} />
+                      ))}
+                    {/* {Array.isArray(image)
+                      ? image.map((file, index) => (
+                          <PreviewImage file={file} isLoading={isLoading} />
+                        ))
+                      : url.map((urlItem, index) => {
+                          console.log(url, url.length);
+                          return (
+                            <PreviewImage
+                              urlItem={urlItem}
+                              isLoading={isLoading}
+                              deleteHandler={() => deleteHandler(index)}
+                            />
+                          );
+                        })} */}
+                  </>
                 ) : (
                   <PreviewImage
                     deleteHandler={deleteHandler}
@@ -173,7 +187,14 @@ const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
               </Box>
             )}
             <Box
-              mt={getIn(values, name) && 2}
+              mt={
+                ((Array.isArray(getIn(values, name)) &&
+                  getIn(values, name).length > 0) ||
+                  (!Array.isArray(getIn(values, name)) &&
+                    getIn(values, name))) &&
+                2
+              }
+              //mt={(image || url) && 2}
               flexGrow={1}
               display={"flex"}
               justifyContent={"center"}
