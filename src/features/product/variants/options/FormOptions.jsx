@@ -30,26 +30,42 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
       };
       return tmpObj;
     });
-    // setValues(() => {
-    //   const variant = values.variants;
-    //   variant[index] = {
-    //     manyRelate: !variant[index].manyRelate,
-    //     name: variant[index].name,
-    //     defaultOption: variant[index].defaultOption,
-    //     options: variant[index].options.map((option) => ({
-    //       ...(!variant[index].manyRelate
-    //         ? { name: option.name, price: option.price, inventoryList: [] }
-    //         : { name: option.name, price: option.price, inventoryId: "" }),
-    //     })),
-    //   };
-
-    //   const tmpObj = {
-    //     ...values,
-    //     variants: variant,
-    //   };
-
-    //   return tmpObj;
-    // });
+  };
+  const switchShowImageHandler = (setValues, values, index) => {
+    setValues(() => {
+      let tmpObj = values;
+      tmpObj.showImage = !tmpObj.showImage;
+      if (tmpObj.showImage) {
+        tmpObj.inventoryImage = false;
+        tmpObj.options = tmpObj.options.map((option) => ({
+          ...option,
+          asset: "",
+        }));
+      } else {
+        delete tmpObj.inventoryImage;
+        tmpObj.options.forEach((option) => {
+          delete option.asset;
+        });
+      }
+      return tmpObj;
+    });
+  };
+  const switchInventoryImageHandler = (setValues, values, index) => {
+    setValues(() => {
+      let tmpObj = values;
+      tmpObj.inventoryImage = !tmpObj.inventoryImage;
+      if (tmpObj.inventoryImage) {
+        tmpObj.options.forEach((option) => {
+          delete option.asset;
+        });
+      } else {
+        tmpObj.options = tmpObj.options.map((option) => ({
+          ...option,
+          asset: "",
+        }));
+      }
+      return tmpObj;
+    });
   };
 
   const { data: inventories, isSuccess } = useGetInventoriesQuery(1, 200);
@@ -101,8 +117,17 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                   <FormikControl
                     control={"switch"}
                     name={`showImage`}
+                    changeHandler={switchShowImageHandler}
                     label={"Show Image"}
                   />
+                  {formik.values.showImage && (
+                    <FormikControl
+                      control={"switch"}
+                      name={`inventoryImage`}
+                      label={"Inventory image"}
+                      changeHandler={switchInventoryImageHandler}
+                    />
+                  )}
 
                   <FieldArray
                     name="variants"
@@ -147,9 +172,7 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                 <FormikControl
                                                   control={"input"}
                                                   name={`options.${index}.price`}
-                                                  label={`Option name ${
-                                                    index + 1
-                                                  }`}
+                                                  label={`Price`}
                                                   type="number"
                                                   fullWidth
                                                 />
@@ -178,6 +201,18 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                   />
                                                 )}
                                               </Grid>
+                                              {formik.values.showImage &&
+                                                !formik.values
+                                                  .inventoryImage && (
+                                                  <Grid item xs={12}>
+                                                    <FormikControl
+                                                      control={"image"}
+                                                      label={"upload image"}
+                                                      name={`options.${index}.asset`}
+                                                      // initUrl={initUrl}
+                                                    />
+                                                  </Grid>
+                                                )}
                                             </Grid>
 
                                             <Box ml={1}>

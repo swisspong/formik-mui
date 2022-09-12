@@ -124,13 +124,13 @@ const UpdateOption = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      swalLoadingNew();
-      await updateOptions({
-        productId,
-        optionGroupId,
-        body: values,
-      }).unwrap();
-      swalSaveSuccess();
+      // swalLoadingNew();
+      // await updateOptions({
+      //   productId,
+      //   optionGroupId,
+      //   body: values,
+      // }).unwrap();
+      // swalSaveSuccess();
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);

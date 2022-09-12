@@ -9,8 +9,12 @@ const ImageWrapper = ({ name, label, multiple, initUrl, ...otherProps }) => {
   const [field, meta] = useField(name);
   const [image, setImage] = useState(null);
   console.log(initUrl);
+  ///config here
+  // const [url, setUrl] = useState(
+  //   initUrl ? (multiple ? (initUrl ? initUrl : []) : null) : null
+  // );
   const [url, setUrl] = useState(
-    initUrl ? (multiple ? (initUrl ? initUrl : []) : []) : null
+    multiple ? (initUrl ? initUrl : []) : initUrl ? initUrl : null
   );
   console.log(url);
   const [isUploading, setIsUploading] = useState(null);
