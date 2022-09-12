@@ -1,4 +1,11 @@
-import { Box, Button, ButtonGroup, Grid, Paper } from "@mui/material";
+import {
+  Box,
+  Button,
+  ButtonGroup,
+  Grid,
+  Paper,
+  Typography,
+} from "@mui/material";
 import { FieldArray, Form, Formik } from "formik";
 import React from "react";
 import * as Yup from "yup";
@@ -7,6 +14,9 @@ import MoveDownIcon from "@mui/icons-material/MoveDown";
 import MoveUpIcon from "@mui/icons-material/MoveUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useGetInventoriesQuery } from "../../../inventory/inventoryApiSlice";
+import PreviewImage from "../../../../components/FormUi/PreviewImage";
+import { useGetOptionListByProductIdAndOptionGroupIdQuery } from "./optionApiSlice";
+import { useParams } from "react-router-dom";
 
 const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
   // const dropdownOptions = [
@@ -15,6 +25,15 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
   //   { key: "Option 2", value: 2 },
   //   { key: "Option 3", value: 3 },
   // ];
+  const { productId, optionGroupId } = useParams();
+  const {
+    data: optionGroup,
+    isLoading,
+    isSuccess: isSuccessOption,
+  } = useGetOptionListByProductIdAndOptionGroupIdQuery({
+    productId,
+    optionGroupId,
+  });
   const switchManyRelateHandler = (setValues, values, index) => {
     setValues(() => {
       const options = values.options;
@@ -211,6 +230,91 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                       name={`options.${index}.asset`}
                                                       // initUrl={initUrl}
                                                     />
+                                                  </Grid>
+                                                )}
+                                              {formik.values.showImage &&
+                                                formik.values
+                                                  .inventoryImage && (
+                                                  <Grid item xs={12}>
+                                                    <Box
+                                                      display={"flex"}
+                                                      sx={{
+                                                        // m: 1,
+                                                        mx: 1,
+                                                        mb: 2,
+                                                        mt: -1,
+                                                      }}
+                                                    >
+                                                      <Box
+                                                        sx={{
+                                                          minWidth: 120,
+                                                          width: "100%",
+                                                        }}
+                                                      >
+                                                        <Typography
+                                                          component={"label"}
+                                                          variant="caption"
+                                                          color={"grey.600"}
+                                                        >
+                                                          Image from product in
+                                                          inventory
+                                                        </Typography>
+                                                        <Box
+                                                          display={"flex"}
+                                                          justifyContent={
+                                                            "flex-start"
+                                                          }
+                                                          sx={{
+                                                            p: 2,
+                                                            w: 1,
+                                                            border:
+                                                              "2px dashed grey",
+                                                            // borderColor: "error.main",
+                                                            borderColor:
+                                                              "grey.500",
+                                                            borderRadius: 1,
+                                                            bgcolor: "grey.50",
+                                                          }}
+                                                        >
+                                                          <Box
+                                                            display={"flex"}
+                                                            flexDirection="column"
+                                                            flexGrow={1}
+                                                            alignContent={
+                                                              "flex-start"
+                                                            }
+                                                          >
+                                                            <Box
+                                                              flexGrow={1}
+                                                              display={"flex"}
+                                                              gap={1}
+                                                              flexWrap="wrap"
+                                                            >
+                                                              {console.log(
+                                                                optionGroup
+                                                                  .options[
+                                                                  index
+                                                                ]
+                                                                  .optionInventoryList[0]
+                                                                  .inventory
+                                                                  .image.path
+                                                              )}
+                                                              <PreviewImage
+                                                                url={
+                                                                  optionGroup
+                                                                    .options[
+                                                                    index
+                                                                  ]
+                                                                    .optionInventoryList[0]
+                                                                    .inventory
+                                                                    .image.path
+                                                                }
+                                                              />
+                                                            </Box>
+                                                          </Box>
+                                                        </Box>
+                                                      </Box>
+                                                    </Box>
                                                   </Grid>
                                                 )}
                                             </Grid>

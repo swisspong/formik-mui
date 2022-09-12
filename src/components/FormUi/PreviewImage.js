@@ -32,15 +32,17 @@ const PreviewImage = ({ file, isLoading = false, url, deleteHandler }) => {
             <CircularProgress color="inherit" />
           </Backdrop>
         )}
-        <IconButton
-          aria-label="delete"
-          size="medium"
-          color="error"
-          sx={{ position: "absolute", right: 5, top: 5 }}
-          onClick={deleteHandler}
-        >
-          <DeleteIcon fontSize="inherit" />
-        </IconButton>
+        {deleteHandler && (
+          <IconButton
+            aria-label="delete"
+            size="medium"
+            color="error"
+            sx={{ position: "absolute", right: 5, top: 5 }}
+            onClick={deleteHandler}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
+        )}
         <img
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
           src={url ? url : preview}
