@@ -24,6 +24,7 @@ export default function MultipleSelectChip({
   name,
   options,
   labelId,
+  //changeHandler,
   ...otherProps
 }) {
   const [field, meta] = useField(name);
@@ -35,7 +36,9 @@ export default function MultipleSelectChip({
       target: { value },
     } = event;
     console.log(value);
+
     setFieldValue(name, typeof value === "string" ? value.split(",") : value);
+    //changeHandler(name, setFieldValue, values, value);
     // setPersonName(
     //   // On autofill we get a stringified value.
     //   typeof value === "string" ? value.split(",") : value

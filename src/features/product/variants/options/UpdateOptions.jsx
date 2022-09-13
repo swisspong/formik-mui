@@ -50,12 +50,15 @@ const UpdateOption = () => {
     if (isSuccess && !isLoading) {
       setInitFormik({
         manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
-        showImage: false,
+        showImage: optionGroup.showImage || false,
+
+        // ...(optionGroup.showImage && { inventoryImage: false }),
         options: optionGroup?.options
           ? optionGroup.options.map((option) => ({
               id: option.id,
               name: option.name,
               price: Number(option.price),
+              ...(optionGroup.showImage && { asset: option.imageId }),
               ...(optionGroup.manyRelate
                 ? {
                     inventoryIdList: option.optionInventoryList.map(
@@ -78,42 +81,6 @@ const UpdateOption = () => {
     }
   }, [isSuccess, optionGroup]);
 
-  const initialValues = {
-    // manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
-    manyRelate: optionGroup?.manyRelate ? optionGroup.manyRelate : false,
-    showImage: false,
-    // options: [
-    //   {
-    //     name: "",
-    //     price: 0,
-    //     inventoryId: "",
-    //   },
-    // ],
-    options: optionGroup?.options
-      ? optionGroup.options.map((option) => ({
-          id: option.id,
-          name: option.name,
-          price: Number(option.price),
-          ...(optionGroup.manyRelate
-            ? {
-                inventoryIdList: option.optionInventoryList.map(
-                  (optionInventory) => optionInventory.inventory.id
-                ),
-              }
-            : //: { inventoryId: "" }),
-              {
-                inventoryId:
-                  option?.optionInventoryList[0]?.inventory?.id || "",
-              }),
-        }))
-      : [
-          {
-            name: "",
-            price: 0,
-            inventoryId: "",
-          },
-        ],
-  };
   const validationSchema = Yup.object({
     // variants: Yup.array()
     //   .of(Yup.object({ name: Yup.string().required() }))
@@ -124,13 +91,13 @@ const UpdateOption = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      swalLoadingNew();
-      await updateOptions({
-        productId,
-        optionGroupId,
-        body: values,
-      }).unwrap();
-      swalSaveSuccess();
+      // swalLoadingNew();
+      // await updateOptions({
+      //   productId,
+      //   optionGroupId,
+      //   body: values,
+      // }).unwrap();
+      // swalSaveSuccess();
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);

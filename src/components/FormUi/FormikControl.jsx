@@ -1,4 +1,5 @@
 import ImageWrapper from "./ImageWrapper";
+import ImageWrapperStateFormik from "./ImageWrapperStateFormik";
 import MultipleSelectChip from "./MultipleSelectChip";
 import SelectWrapper from "./SelectWrapper";
 import SwitchWrapper from "./SwitchWrapper";
@@ -19,6 +20,8 @@ const FormikControl = ({ control, ...otherProps }) => {
       return <SwitchWrapper {...otherProps} />;
     case "image":
       return <ImageWrapper {...otherProps} />;
+    case "imageFormikState":
+      return <ImageWrapperStateFormik {...otherProps} />;
     default:
       return null;
   }

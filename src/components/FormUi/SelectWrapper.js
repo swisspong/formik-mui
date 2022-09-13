@@ -8,12 +8,20 @@ import {
   FormHelperText,
 } from "@mui/material";
 import { useField, useFormikContext } from "formik";
-const SelectWrapper = ({ name, label, options, ...otherProps }) => {
+const SelectWrapper = ({
+  name,
+  label,
+  options,
+  changeHandler,
+  ...otherProps
+}) => {
   const [field, meta] = useField(name);
-  const { setFieldValue, setValues } = useFormikContext();
+  const { setFieldValue, setValues, values } = useFormikContext();
   const onChange = (e) => {
     const { value } = e.target;
     setFieldValue(name, value);
+    changeHandler(name, setFieldValue, values, value);
+    //custom go here
   };
 
   const selectProps = {

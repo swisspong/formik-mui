@@ -63,25 +63,6 @@ const FormProductEdit = ({
 
   return (
     <>
-      <Autocomplete
-        multiple
-        id="tags-standard"
-        options={[]}
-        freeSolo
-        // getOptionLabel={(option) => option.title}
-        defaultValue={[...tags]}
-        autoSelect
-        onChange={(e) => setTags(prevState=>[...prevState, e.target.value])}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            // variant="standard"
-            label="Multiple values"
-            placeholder="Favorites"
-            value={tags}
-          />
-        )}
-      />
       {isSuccess && isSuccessInventories && (
         <Formik
           initialValues={initialValues}

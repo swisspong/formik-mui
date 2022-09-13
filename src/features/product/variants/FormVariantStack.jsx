@@ -292,10 +292,23 @@ const FormVariantStack = () => {
                                         size="small"
                                         aria-label="vertical outlined button group"
                                       >
-                                        <Button>
+                                        <Button
+                                          onClick={() =>
+                                            arrayHelpers.move(index, index - 1)
+                                          }
+                                          disabled={index <= 0}
+                                        >
                                           <MoveUpIcon />
                                         </Button>
-                                        <Button>
+                                        <Button
+                                          onClick={() =>
+                                            arrayHelpers.move(index, index + 1)
+                                          }
+                                          disabled={
+                                            index >=
+                                            formik.values.variants.length - 1
+                                          }
+                                        >
                                           <MoveDownIcon />
                                         </Button>
                                       </ButtonGroup>

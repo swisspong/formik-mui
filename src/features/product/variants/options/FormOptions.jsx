@@ -2,11 +2,13 @@ import {
   Box,
   Button,
   ButtonGroup,
+  FormControl,
+  FormHelperText,
   Grid,
   Paper,
   Typography,
 } from "@mui/material";
-import { FieldArray, Form, Formik } from "formik";
+import { FieldArray, Form, Formik, getIn } from "formik";
 import React from "react";
 import * as Yup from "yup";
 import FormikControl from "../../../../components/FormUi/FormikControl";
@@ -43,8 +45,18 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
         manyRelate: !values.manyRelate,
         options: options.map((option) => ({
           ...(!values?.manyRelate
-            ? { name: option.name, price: option.price, inventoryIdList: [] }
-            : { name: option.name, price: option.price, inventoryId: "" }),
+            ? {
+                name: option.name,
+                price: option.price,
+                inventoryIdList: [],
+                ...(values.showImage && { asset: "" }),
+              }
+            : {
+                name: option.name,
+                price: option.price,
+                inventoryId: "",
+                ...(values.showImage && { asset: "" }),
+              }),
         })),
       };
       return tmpObj;
@@ -55,13 +67,11 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
       let tmpObj = values;
       tmpObj.showImage = !tmpObj.showImage;
       if (tmpObj.showImage) {
-        tmpObj.inventoryImage = false;
         tmpObj.options = tmpObj.options.map((option) => ({
           ...option,
           asset: "",
         }));
       } else {
-        delete tmpObj.inventoryImage;
         tmpObj.options.forEach((option) => {
           delete option.asset;
         });
@@ -86,9 +96,8 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
       return tmpObj;
     });
   };
-
   const { data: inventories, isSuccess } = useGetInventoriesQuery(1, 200);
-
+  console.log(inventories);
   const dropdownOptions = isSuccess
     ? inventories.data.map((inventory) => ({
         key: inventory.name,
@@ -96,6 +105,40 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
       }))
     : [];
   dropdownOptions.unshift({ key: "Select a option", value: "" });
+
+  const customOnChangeSelectHandler = (name, setFieldValue, values, value) => {
+    const nameSplit = name.split(".");
+    const index = Number(nameSplit[1]);
+    const nameOfImage = `options.${index}.asset`;
+    const assetValue = getIn(values, nameOfImage);
+    if (!isNaN(assetValue) && assetValue > 0) {
+    } else {
+      const image = inventories.data.find(
+        (inventory) => inventory.id === value
+      ).image;
+      console.log(image);
+      setFieldValue(nameOfImage, { id: image.id, path: image.path });
+    }
+  };
+  const customOnChangeSelectMultipleHandler = (
+    name,
+    setFieldValue,
+    values,
+    value
+  ) => {
+    const nameSplit = name.split(".");
+    const index = Number(nameSplit[1]);
+    const nameOfImage = `options.${index}.asset`;
+    const assetValue = getIn(values, nameOfImage);
+    if (!isNaN(assetValue) && assetValue > 0) {
+    } else {
+      const image = inventories.data.find(
+        (inventory) => inventory.id === value[0]
+      ).image;
+      console.log(image);
+      setFieldValue(nameOfImage, { id: image.id, path: image.path });
+    }
+  };
   // const initialValues = {
   //   manyRelate: false,
   //   showImage: false,
@@ -139,15 +182,14 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                     changeHandler={switchShowImageHandler}
                     label={"Show Image"}
                   />
-                  {formik.values.showImage && (
+                  {/* {formik.values.showImage && (
                     <FormikControl
                       control={"switch"}
                       name={`inventoryImage`}
                       label={"Inventory image"}
                       changeHandler={switchInventoryImageHandler}
                     />
-                  )}
-
+                  )} */}
                   <FieldArray
                     name="variants"
                     render={(arrayHelpers) => (
@@ -207,6 +249,9 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                     labelId={
                                                       "inventory-list-label"
                                                     }
+                                                    // changeHandler={
+                                                    //   customOnChangeSelectMultipleHandler
+                                                    // }
                                                     options={dropdownOptions}
                                                   />
                                                 ) : (
@@ -216,23 +261,52 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                     label={
                                                       "Select a product from inventory"
                                                     }
+                                                    changeHandler={
+                                                      customOnChangeSelectHandler
+                                                    }
                                                     options={dropdownOptions}
                                                   />
                                                 )}
                                               </Grid>
-                                              {formik.values.showImage &&
-                                                !formik.values
-                                                  .inventoryImage && (
+                                              {/* {formik.values.showImage &&
+                                                (
                                                   <Grid item xs={12}>
                                                     <FormikControl
                                                       control={"image"}
                                                       label={"upload image"}
                                                       name={`options.${index}.asset`}
-                                                      // initUrl={initUrl}
+                                                      initUrl={
+                                                        inventories.data.find(
+                                                          (inventory) =>
+                                                            inventory.id ===
+                                                            formik.values
+                                                              .options[index]
+                                                              .asset
+                                                        )?.image?.path
+                                                      }
                                                     />
                                                   </Grid>
-                                                )}
-                                              {formik.values.showImage &&
+                                                )} */}
+                                              {formik.values.showImage && (
+                                                <Grid item xs={12}>
+                                                  <FormikControl
+                                                    control={"imageFormikState"}
+                                                    label={"upload image"}
+                                                    name={`options.${index}.asset`}
+                                                    disabled={
+                                                      formik.values.manyRelate
+                                                        ? formik.values.options[
+                                                            index
+                                                          ].inventoryIdList
+                                                            .length <= 0
+                                                        : formik.values.options[
+                                                            index
+                                                          ].inventoryId === ""
+                                                    }
+                                                  />
+                                                </Grid>
+                                              )}
+                                              {/* {formik.values.showImage &&
                                                 formik.values
                                                   .inventoryImage && (
                                                   <Grid item xs={12}>
@@ -245,12 +319,28 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                         mt: -1,
                                                       }}
                                                     >
-                                                      <Box
+                                                      <FormControl
                                                         sx={{
                                                           minWidth: 120,
                                                           width: "100%",
                                                         }}
+                                                        error={
+                                                          !inventories.data.find(
+                                                            (inventory) =>
+                                                              inventory.id ===
+                                                              formik.values
+                                                                .options[index]
+                                                                .inventoryId
+                                                          )?.image?.path
+                                                            ? true
+                                                            : false
+
+                                                          // meta.touched &&
+                                                          // meta.error
+                                                        }
+                                                        fullWidth
                                                       >
+                                                 
                                                         <Typography
                                                           component={"label"}
                                                           variant="caption"
@@ -290,33 +380,69 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                                               gap={1}
                                                               flexWrap="wrap"
                                                             >
+                                                          
                                                               {console.log(
-                                                                optionGroup
-                                                                  .options[
-                                                                  index
-                                                                ]
-                                                                  .optionInventoryList[0]
-                                                                  .inventory
-                                                                  .image.path
+                                                                inventories.data.find(
+                                                                  (inventory) =>
+                                                                    inventory.id ===
+                                                                    formik
+                                                                      .values
+                                                                      .options[
+                                                                      index
+                                                                    ]
+                                                                      .inventoryId
+                                                                )?.image?.path
                                                               )}
-                                                              <PreviewImage
-                                                                url={
-                                                                  optionGroup
+                                                              {inventories.data.find(
+                                                                (inventory) =>
+                                                                  inventory.id ===
+                                                                  formik.values
                                                                     .options[
                                                                     index
-                                                                  ]
-                                                                    .optionInventoryList[0]
-                                                                    .inventory
-                                                                    .image.path
-                                                                }
-                                                              />
+                                                                  ].inventoryId
+                                                              )?.image
+                                                                ?.path && (
+                                                                <PreviewImage
+                                                            
+                                                                  url={
+                                                                    inventories.data.find(
+                                                                      (
+                                                                        inventory
+                                                                      ) =>
+                                                                        inventory.id ===
+                                                                        formik
+                                                                          .values
+                                                                          .options[
+                                                                          index
+                                                                        ]
+                                                                          .inventoryId
+                                                                    )?.image
+                                                                      ?.path ||
+                                                                    null
+                                                                  }
+                                                                />
+                                                              )}
                                                             </Box>
                                                           </Box>
                                                         </Box>
-                                                      </Box>
+                                                  
+                                                        {!inventories.data.find(
+                                                          (inventory) =>
+                                                            inventory.id ===
+                                                            formik.values
+                                                              .options[index]
+                                                              .inventoryId
+                                                        )?.image?.path && (
+                                                          <FormHelperText>
+                                                            {
+                                                              "You must select product from inventory first"
+                                                            }
+                                                          </FormHelperText>
+                                                        )}
+                                                      </FormControl>
                                                     </Box>
                                                   </Grid>
-                                                )}
+                                                )} */}
                                             </Grid>
 
                                             <Box ml={1}>
@@ -358,9 +484,17 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
                                             <Button
                                               variant="outlined"
                                               color={"error"}
-                                              onClick={() =>
-                                                arrayHelpers.remove(index)
+                                              disabled={
+                                                formik.values.options.length <=
+                                                1
                                               }
+                                              onClick={() => {
+                                                if (
+                                                  formik.values.options.length >
+                                                  1
+                                                )
+                                                  arrayHelpers.remove(index);
+                                              }}
                                             >
                                               <DeleteIcon />
                                             </Button>
