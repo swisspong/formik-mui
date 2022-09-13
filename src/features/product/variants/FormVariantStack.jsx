@@ -35,10 +35,12 @@ import { Link, useParams } from "react-router-dom";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import RadioButtonUncheckedIcon from "@mui/icons-material/RadioButtonUnchecked";
 import {
   useGetProductByIdQuery,
   useUpdateProductVariantMutation,
 } from "../productApiSlice";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {
   swalCreateFail,
   swalLoadingNew,
@@ -174,7 +176,6 @@ const FormVariantStack = () => {
     variants: optionGroupList?.map((optionGroup) => ({
       id: optionGroup.id,
       name: optionGroup.name,
-      manyRelate: optionGroup.manyRelate,
       options: optionGroup.options.map(({ id, name }) => ({ id, name })),
     })),
   };
@@ -235,17 +236,69 @@ const FormVariantStack = () => {
                                     alignItems={"center"}
                                   >
                                     <Stack width={1} direction="column">
-                                      <Stack direction={"row"}>
+                                      <Stack
+                                        direction={"row"}
+                                        spacing={1}
+                                        mx={1}
+                                      >
                                         {/* <FormikControl
                                           control={"switch"}
+                                          name={`variants.${index}.manyRelate`}
                                           //   changeHandler={switchManyRelateHandler}
                                           label={"Many Relate"}
+                                          disabled
                                         />
 
                                         <FormikControl
+                                          name={`variants.${index}.showImage`}
                                           control={"switch"}
                                           label={"Show Image"}
+                                          disabled
                                         /> */}
+                                        {optionGroupList.length > index && (
+                                          <>
+                                            {optionGroupList[index]
+                                              .manyRelate ? (
+                                              <Chip
+                                                color="primary"
+                                                size="small"
+                                                label={"Many elate"}
+                                                icon={
+                                                  <CheckCircleOutlineIcon />
+                                                }
+                                              />
+                                            ) : (
+                                              <Chip
+                                                color="default"
+                                                size="small"
+                                                label={"Not many relate"}
+                                                icon={
+                                                  <RadioButtonUncheckedIcon />
+                                                }
+                                              />
+                                            )}
+                                            {optionGroupList[index]
+                                              .showImage ? (
+                                              <Chip
+                                                color="primary"
+                                                size="small"
+                                                label={"Show image"}
+                                                icon={
+                                                  <CheckCircleOutlineIcon />
+                                                }
+                                              />
+                                            ) : (
+                                              <Chip
+                                                color="default"
+                                                size="small"
+                                                label={"Not show image"}
+                                                icon={
+                                                  <RadioButtonUncheckedIcon />
+                                                }
+                                              />
+                                            )}
+                                          </>
+                                        )}
                                       </Stack>
                                       <Stack
                                         direction="row"
@@ -383,7 +436,8 @@ const FormVariantStack = () => {
                                         You must be provide options
                                       </Alert>
                                     )} */}
-                                  {optionGroupList[index] &&
+
+                                  {/* {optionGroupList[index] &&
                                     !optionGroupList
                                       ?.find(
                                         (optionGroup) =>
@@ -406,7 +460,69 @@ const FormVariantStack = () => {
                                       >
                                         You must be provide options
                                       </Alert>
-                                    )}
+                                    )} */}
+                                  {console.log(
+                                    optionGroupList.length,
+                                    optionGroupList.length > index
+                                  )}
+                                  {optionGroupList.length > index && (
+                                    <>
+                                      {!optionGroupList[index].allowStatus ? (
+                                        <Alert
+                                          variant="standard"
+                                          severity="warning"
+                                          sx={{
+                                            position: "absolute",
+                                            top: "0",
+                                            left: "50%",
+                                            transform: "translate(-50%,-60%)",
+                                          }}
+                                        >
+                                          You must be provide options
+                                        </Alert>
+                                      ) : (
+                                        <Alert
+                                          variant="standard"
+                                          severity="success"
+                                          sx={{
+                                            position: "absolute",
+                                            top: "0",
+                                            left: "50%",
+                                            transform: "translate(-50%,-60%)",
+                                          }}
+                                        >
+                                          Manage options success
+                                        </Alert>
+                                      )}
+                                    </>
+                                  )}
+                                  {/* {!optionGroupList[index].allowStatus ? (
+                                    <Alert
+                                      variant="standard"
+                                      severity="warning"
+                                      sx={{
+                                        position: "absolute",
+                                        top: "0",
+                                        left: "50%",
+                                        transform: "translate(-50%,-60%)",
+                                      }}
+                                    >
+                                      You must be provide options
+                                    </Alert>
+                                  ) : (
+                                    <Alert
+                                      variant="standard"
+                                      severity="success"
+                                      sx={{
+                                        position: "absolute",
+                                        top: "0",
+                                        left: "50%",
+                                        transform: "translate(-50%,-60%)",
+                                      }}
+                                    >
+                                      Manage options success
+                                    </Alert>
+                                  )} */}
                                 </Stack>
                                 <Button
                                   sx={{
@@ -415,6 +531,7 @@ const FormVariantStack = () => {
                                   }}
                                   variant="outlined"
                                   color={"error"}
+                                  onClick={() => arrayHelpers.remove(index)}
                                 >
                                   <DeleteIcon />
                                 </Button>

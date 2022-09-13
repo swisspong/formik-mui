@@ -1,5 +1,7 @@
 import {
+  Alert,
   Autocomplete,
+  Avatar,
   Box,
   Button,
   ButtonGroup,
@@ -15,6 +17,9 @@ import {
   Typography,
 } from "@mui/material";
 import { FieldArray, Form, Formik } from "formik";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+
+import WarningAmberIcon from "@mui/icons-material/WarningAmber";
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import * as Yup from "yup";
@@ -142,6 +147,7 @@ const FormProductEdit = ({
                       <Table size="small" aria-label="a dense table">
                         <TableHead>
                           <TableRow>
+                            <TableCell>Status</TableCell>
                             <TableCell>Option group</TableCell>
                             <TableCell>Optoins</TableCell>
                             {/* <TableCell align="right">
@@ -159,10 +165,26 @@ const FormProductEdit = ({
                                 },
                               }}
                             >
-                              <TableCell component="th" scope="row">
-                                {row.name}
+                              {console.log(row)}
+                              <TableCell padding="checkbox">
+                                {row.allowStatus ? (
+                                  <Chip
+                                    color="success"
+                                    size="small"
+                                    label={"Is available"}
+                                    icon={<CheckCircleOutlineIcon />}
+                                  />
+                                ) : (
+                                  <Chip
+                                    color="warning"
+                                    size="small"
+                                    label={"Is not available"}
+                                    icon={<WarningAmberIcon />}
+                                  />
+                                )}
                               </TableCell>
-                              <TableCell component="th" scope="row">
+                              <TableCell scope="row">{row.name}</TableCell>
+                              <TableCell scope="row">
                                 <Paper
                                   sx={{
                                     display: "flex",
@@ -178,10 +200,17 @@ const FormProductEdit = ({
                                 >
                                   {row.options.map((option) => (
                                     <ListItem>
+                                     {/* {console.log(row.showImage,option.image?.path)} */}
                                       <Chip
-                                        color="secondary"
+                                        color="default"
                                         variant="outlined"
                                         // icon={icon}
+                                        {...(row.showImage && {
+                                          avatar: (
+                                            <Avatar src={option.image.path} />
+                                          ),
+                                        })}
+                                        
                                         label={option.name}
                                         // onDelete={data.label === 'React' ? undefined : handleDelete(data)}
                                       />

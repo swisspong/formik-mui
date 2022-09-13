@@ -107,17 +107,19 @@ const FormOptions = ({ initialValues, onSubmit, validationSchema }) => {
   dropdownOptions.unshift({ key: "Select a option", value: "" });
 
   const customOnChangeSelectHandler = (name, setFieldValue, values, value) => {
-    const nameSplit = name.split(".");
-    const index = Number(nameSplit[1]);
-    const nameOfImage = `options.${index}.asset`;
-    const assetValue = getIn(values, nameOfImage);
-    if (!isNaN(assetValue) && assetValue > 0) {
-    } else {
-      const image = inventories.data.find(
-        (inventory) => inventory.id === value
-      ).image;
-      console.log(image);
-      setFieldValue(nameOfImage, { id: image.id, path: image.path });
+    if (getIn(values, "showImage")) {
+      const nameSplit = name.split(".");
+      const index = Number(nameSplit[1]);
+      const nameOfImage = `options.${index}.asset`;
+      const assetValue = getIn(values, nameOfImage);
+      if (!isNaN(assetValue) && assetValue > 0) {
+      } else {
+        const image = inventories.data.find(
+          (inventory) => inventory.id === value
+        ).image;
+        console.log(image);
+        setFieldValue(nameOfImage, { id: image.id, path: image.path });
+      }
     }
   };
   const customOnChangeSelectMultipleHandler = (

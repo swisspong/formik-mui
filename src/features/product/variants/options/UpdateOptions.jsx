@@ -45,6 +45,7 @@ const UpdateOption = () => {
       },
     ],
   });
+  console.log(optionGroup);
 
   useEffect(() => {
     if (isSuccess && !isLoading) {
@@ -58,7 +59,10 @@ const UpdateOption = () => {
               id: option.id,
               name: option.name,
               price: Number(option.price),
-              ...(optionGroup.showImage && { asset: option.imageId }),
+
+              ...(optionGroup.showImage && {
+                asset: { id: option.image.id, path: option.image.path },
+              }),
               ...(optionGroup.manyRelate
                 ? {
                     inventoryIdList: option.optionInventoryList.map(
@@ -91,13 +95,25 @@ const UpdateOption = () => {
   const onSubmit = async (values) => {
     try {
       console.log("formik values", values);
-      // swalLoadingNew();
-      // await updateOptions({
-      //   productId,
-      //   optionGroupId,
-      //   body: values,
-      // }).unwrap();
-      // swalSaveSuccess();
+
+      // const formatPresubmit = Object.assign({}, values);
+      // formatPresubmit.options = [
+      //   ...(values.showImage
+      //     ? values.options.map((option) => ({
+      //         ...option,
+      //         asset: option.asset.id,
+      //       }))
+      //     : values),
+      // ];
+      // console.log("pre submit", formatPresubmit);
+
+      swalLoadingNew();
+      await updateOptions({
+        productId,
+        optionGroupId,
+        body: values,
+      }).unwrap();
+      swalSaveSuccess();
     } catch (error) {
       swalCreateFail(error.data.message);
       console.error("Failed to save the post", error.data.message);
