@@ -98,7 +98,3 @@ export const {
 export const selectInventoryResult =
   extendApiSlice.endpoints.getInventories.select();
 
-//   const selectCategoriesData = createSelector(
-//     selectCategoriesResult,
-//     (categoriesResult) => categoriesResult.data
-//   );

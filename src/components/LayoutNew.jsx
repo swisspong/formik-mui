@@ -31,6 +31,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import ListAltIcon from '@mui/icons-material/ListAlt';
 import {
   Outlet,
   useLocation,
@@ -84,6 +85,11 @@ const LayoutNew = (props) => {
             text: "Product",
             icon: <PrecisionManufacturingIcon />,
             onClick: () => navigate("/product"),
+          },
+          {
+            text: "Order",
+            icon: <ListAltIcon/>,
+            onClick: () => navigate("/order"),
           },
         ].map(({ text, icon, onClick }, index) => (
           <ListItem key={text} disablePadding>

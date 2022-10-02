@@ -57,6 +57,7 @@ import UpsertVariant from "./features/product/variants/UpsertVariant";
 import UpdateOption from "./features/product/variants/options/UpdateOptions";
 import Layout2 from "./components/Layout2";
 import LayoutNew from "./components/LayoutNew";
+import OrderTable from "./features/order/OrderTable";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -158,6 +159,12 @@ function App() {
             <Route path="edit/:inventoryId" element={<EditInventory />} />
             <Route path="view/:inventoryId" element={<ViewInventory />} />
           </Route>
+          <Route path="order">
+            <Route index element={<OrderTable />} />
+            {/* <Route path="create" element={<CreateInventory />} />
+            <Route path="edit/:inventoryId" element={<EditInventory />} />
+            <Route path="view/:inventoryId" element={<ViewInventory />} /> */}
+          </Route>
           <Route path="product">
             <Route index element={<ProductTable />} />
             <Route path="create" element={<CreateProduct />} />
@@ -167,7 +174,10 @@ function App() {
               {/* <Route path="variants" element={<UpsertVariant />} /> */}
               <Route path="variants">
                 <Route index element={<UpsertVariant />} />
-                <Route path=":optionGroupId/options" element={<UpdateOption/>}/>
+                <Route
+                  path=":optionGroupId/options"
+                  element={<UpdateOption />}
+                />
               </Route>
             </Route>
           </Route>
