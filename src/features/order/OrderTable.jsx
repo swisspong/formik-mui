@@ -14,7 +14,7 @@ const columns = (deleteHandler) => [
   },
   {
     name: "#",
-    selector: (row) => row.customer.firstName,
+    selector: (row) => row.recipientName,
     sortable: true,
     sortField: "number",
   },
@@ -25,8 +25,8 @@ const columns = (deleteHandler) => [
     sortField: "number",
   },
   {
-    name: "total quantity",
-    selector: (row) => row.totalQuantity,
+    name: "status",
+    selector: (row) => row.status,
     sortable: true,
     sortField: "number",
   },
@@ -36,13 +36,30 @@ const columns = (deleteHandler) => [
     sortable: true,
     sortField: "number",
   },
+  {
+    name: "Action",
+    button: true,
+    cell: (row) => {
+      return (
+        <>
+          <Box>
+            <CustomizedMenus
+              editPath={`edit/${row.id}`}
+              viewPath={`view/${row.id}`}
+              // deleteHandler={() => deleteHandler({ id: row.id })}
+            />
+          </Box>
+        </>
+      );
+    },
+  },
 ];
 const OrderTable = () => {
   const [perPage, setPerPage] = useState(10);
   const [page, setPage] = useState(1);
   const [deleteInventory] = useDeleteOrderMutation();
   const {
-    data: products,
+    data: orders,
     isError,
     isLoading,
     isSuccess,
@@ -64,13 +81,13 @@ const OrderTable = () => {
       <TableContainer component={Paper}>
         <DataTable
           columns={columns(deleteInventory)}
-          data={isSuccess ? products.data : []}
+          data={isSuccess ? orders.data : []}
           progressPending={isLoading}
           onChangePage={changePageHandler}
           onChangeRowsPerPage={rowsPerPageHandler}
           pagination
           paginationServer
-          paginationTotalRows={isSuccess && products.total}
+          paginationTotalRows={isSuccess && orders.total}
         />
       </TableContainer>
     </>

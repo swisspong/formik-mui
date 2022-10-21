@@ -58,6 +58,7 @@ import UpdateOption from "./features/product/variants/options/UpdateOptions";
 import Layout2 from "./components/Layout2";
 import LayoutNew from "./components/LayoutNew";
 import OrderTable from "./features/order/OrderTable";
+import EditOrder from "./features/order/EditOrder";
 function App() {
   function handleClick(event) {
     event.preventDefault();
@@ -161,6 +162,7 @@ function App() {
           </Route>
           <Route path="order">
             <Route index element={<OrderTable />} />
+            <Route path="edit/:orderId" element={<EditOrder />} />
             {/* <Route path="create" element={<CreateInventory />} />
             <Route path="edit/:inventoryId" element={<EditInventory />} />
             <Route path="view/:inventoryId" element={<ViewInventory />} /> */}
