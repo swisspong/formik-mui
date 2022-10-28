@@ -37,7 +37,7 @@ const invoiceSubtotal = subtotal(rows);
 const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 
-export default function OrderTableCollapse() {
+export default function OrderTableCollapse({order}) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="spanning table">
@@ -88,7 +88,10 @@ export default function OrderTableCollapse() {
           </TableRow>
           <TableRow>
             <TableCell colSpan={2}>Total</TableCell>
-            <TableCell align="right">{ccyFormat(invoiceTotal)}</TableCell>
+            <TableCell align="right">{
+            // ccyFormat(invoiceTotal)
+            ccyFormat(Number(order?.totalPrice))
+            }</TableCell>
           </TableRow>
         </TableBody>
       </Table>

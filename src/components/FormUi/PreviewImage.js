@@ -46,6 +46,7 @@ const PreviewImage = ({ file, isLoading = false, url, deleteHandler }) => {
         <img
           style={{ width: "100%", height: "100%", objectFit: "contain" }}
           src={url ? url : preview}
+          alt="slip"
         />
       </Paper>
       {/* <Box

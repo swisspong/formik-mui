@@ -11,6 +11,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Typography,
 } from "@mui/material";
 import Section from "../../components/Section";
 import OrderTable from "../../components/orderComp/OrderTable";
@@ -86,10 +87,10 @@ const EditOrder = () => {
       )} */}
       {isSuccess && (
         <Paper sx={{ p: 2 }}>
-          <StepperStatus/>
+          <StepperStatus />
           <Grid container spacing={3}>
             <Grid item xs={9}>
-              <OrderTableCollapse />
+              <OrderTableCollapse order={order} />
               <br />
               {/* <OrderTable /> */}
             </Grid>
@@ -97,7 +98,6 @@ const EditOrder = () => {
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <Paper sx={{ p: 2 }}>
-                  
                     <Section label={"Recipient"} info={order?.recipientName} />
                     <Section label={"Address"} info={order?.address} />
                     <Section label={"Phone"} info={order?.phone} />
@@ -127,8 +127,19 @@ const EditOrder = () => {
                           "https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"
                         }
                       />
-                      <DialogImage />
+                      <Box sx={{ width: "100%" }}>
                    
+                        <Section label={"Price"} info={order?.recipientName} mb={0} />
+                        <Section label={"Price"} info={order?.recipientName} />
+                      </Box>
+
+                      <DialogImage />
+                      <PreviewImage
+                        url={
+                          "https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"
+                        }
+                      />
+                      <DialogImage />
                     </Box>
                   </Paper>
                 </Grid>

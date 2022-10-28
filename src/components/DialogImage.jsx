@@ -15,6 +15,7 @@ import Switch from "@mui/material/Switch";
 import { TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import FormVerifiedOrder from "../features/order/FormVerifiedOrder";
 
 export default function DialogImage() {
   const theme = useTheme();
@@ -56,56 +57,16 @@ export default function DialogImage() {
       >
         <DialogTitle>Slip View</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText>
-            You can set my maximum width and whether to adapt or not.
-          </DialogContentText>
-          <Box
-            noValidate
-            component="form"
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              m: 'auto',
-              width: 'fit-content',
-            }}
-          >
-            <FormControl sx={{ mt: 2, minWidth: 120 }}>
-              <InputLabel htmlFor="max-width">maxWidth</InputLabel>
-              <Select
-                autoFocus
-                value={maxWidth}
-                onChange={handleMaxWidthChange}
-                label="maxWidth"
-                inputProps={{
-                  name: 'max-width',
-                  id: 'max-width',
-                }}
-              >
-                <MenuItem value={false}>false</MenuItem>
-                <MenuItem value="xs">xs</MenuItem>
-                <MenuItem value="sm">sm</MenuItem>
-                <MenuItem value="md">md</MenuItem>
-                <MenuItem value="lg">lg</MenuItem>
-                <MenuItem value="xl">xl</MenuItem>
-              </Select>
-            </FormControl>
-            <FormControlLabel
-              sx={{ mt: 1 }}
-              control={
-                <Switch checked={fullWidth} onChange={handleFullWidthChange} />
-              }
-              label="Full width"
-            />
-          </Box> */}
           <Box sx={{ position: "relative" }}>
             <img
               style={{ width: "100%", height: "100%", objectFit: "contain" }}
               src={"https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"}
+              alt="slip"
             />
           </Box>
         </DialogContent>
         <DialogActions>
-          <Box
+          {/* <Box
             sx={{
               width: "100%",
               display: "flex",
@@ -131,9 +92,9 @@ export default function DialogImage() {
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                //   value={age}
+             
                 label="Age"
-                //   onChange={handleChange}
+            
               >
                 <MenuItem value={10}>Wrong Image</MenuItem>
                 <MenuItem value={20}>Invalid Price</MenuItem>
@@ -147,7 +108,19 @@ export default function DialogImage() {
                 Close
               </Button>
             </Box>
-          </Box>
+          </Box> */}
+          <FormVerifiedOrder
+            initialValues={{ referId: "", price: "",status:"" }}
+            dropdownOptions={[
+              { key: "", value: "" },
+              { key: "Invalid Slip Image", value: "INVALID_SLIP" },
+            ]}
+            onSubmit={(values)=>{
+              console.log(values)
+              handleClose()
+            }}
+            handleClose={handleClose}
+          />
         </DialogActions>
       </Dialog>
     </React.Fragment>

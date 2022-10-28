@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 import React from "react";
 
-const Section = ({ label, info }) => {
+const Section = ({ label, info,mb=20 }) => {
   return (
-    <section style={{ display: "block", marginBottom: 20 }}>
+    <section style={{ display: "block", marginBottom: mb }}>
       <Typography
         component={"label"}
         variant="caption"
