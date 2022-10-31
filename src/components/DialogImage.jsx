@@ -16,14 +16,15 @@ import { TextField } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import FormVerifiedOrder from "../features/order/FormVerifiedOrder";
+import { useVerifiedSlipMutation } from "../features/order/orderApiSlice";
 
-export default function DialogImage() {
+export default function DialogImage({ orderId, slipId, slip }) {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [fullWidth, setFullWidth] = React.useState(true);
   const [maxWidth, setMaxWidth] = React.useState("sm");
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-
+  const [verifiedSlip] = useVerifiedSlipMutation();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -46,7 +47,7 @@ export default function DialogImage() {
   return (
     <React.Fragment>
       <Button variant="outlined" onClick={handleClickOpen}>
-        Verified Slip
+        {slip?.verified === true ? "Verified Slip" : "Verify Slip"}
       </Button>
       <Dialog
         fullScreen={fullScreen}
@@ -110,14 +111,19 @@ export default function DialogImage() {
             </Box>
           </Box> */}
           <FormVerifiedOrder
-            initialValues={{ referId: "", price: "",status:"" }}
+            initialValues={{
+              referId: slip?.referId || "",
+              price: slip?.price || "",
+              status: "",
+            }}
             dropdownOptions={[
               { key: "", value: "" },
               { key: "Invalid Slip Image", value: "INVALID_SLIP" },
             ]}
-            onSubmit={(values)=>{
-              console.log(values)
-              handleClose()
+            onSubmit={(values) => {
+              console.log(values);
+              verifiedSlip({ orderId, slipId, body: values });
+              handleClose();
             }}
             handleClose={handleClose}
           />

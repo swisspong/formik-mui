@@ -89,10 +89,8 @@ const EditOrder = () => {
         <Paper sx={{ p: 2 }}>
           <StepperStatus />
           <Grid container spacing={3}>
-            <Grid item xs={9}>
+            <Grid item xs={12}>
               <OrderTableCollapse order={order} />
-              <br />
-              {/* <OrderTable /> */}
             </Grid>
             <Grid item xs={3}>
               <Grid container spacing={3}>
@@ -101,9 +99,29 @@ const EditOrder = () => {
                     <Section label={"Recipient"} info={order?.recipientName} />
                     <Section label={"Address"} info={order?.address} />
                     <Section label={"Phone"} info={order?.phone} />
+                    <Section
+                      label={"Payment Method"}
+                      info={order?.paymentMethod}
+                    />
+                    <Section
+                      label={"Total price of slip"}
+                      info={
+                        order?.slip.reduce(
+                          (prev, curr) => Number(prev) + Number(curr.price),
+                          0
+                        ) +
+                        ` (${
+                          order.totalPrice -
+                          order?.slip.reduce(
+                            (prev, curr) => Number(prev) + Number(curr.price),
+                            0
+                          )
+                        }) Left`
+                      }
+                    />
                   </Paper>
                 </Grid>
-                <Grid item xs={12}>
+                {/* <Grid item xs={12}>
                   <Paper sx={{ p: 2 }}>
                     <Section
                       label={"Payment Method"}
@@ -113,7 +131,6 @@ const EditOrder = () => {
                     />
                     <Box
                       sx={{
-                        // m: 1,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
@@ -127,32 +144,49 @@ const EditOrder = () => {
                           "https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"
                         }
                       />
-                      <Box sx={{ width: "100%" }}>
-                   
-                        <Section label={"Price"} info={order?.recipientName} mb={0} />
-                        <Section label={"Price"} info={order?.recipientName} />
-                      </Box>
 
-                      <DialogImage />
-                      <PreviewImage
-                        url={
-                          "https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"
-                        }
-                      />
                       <DialogImage />
                     </Box>
                   </Paper>
-                </Grid>
+                </Grid> */}
               </Grid>
-              {/* <Paper sx={{ p: 2 }}>
-                <Section label={"Recipient"} info={order?.recipientName} />
-                <Section label={"Address"} info={order?.address} />
-                <Section label={"Phone"} info={order?.phone} />
-                <Section
-                  label={"Payment Method"}
-                  info={order?.paymentMethod === "SLIP" ? "Attach Slip" : ""}
-                />
-              </Paper> */}
+            </Grid>
+            <Grid item xs={9}>
+              <Paper sx={{ p: 2 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    mx: 1,
+                  }}
+                >
+                  {order?.slip.map((slip, index) => (
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      <Section info={`[${index + 1}]`} mb={0} />
+                      <PreviewImage url={slip.image.path} />
+
+                      <Section
+                        label={"Refer ID"}
+                        info={slip.referId || "please verified"}
+                        mb={0}
+                      />
+                      <Section
+                        label={"Price"}
+                        info={slip.price || "please verifeid"}
+                        mb={0}
+                      />
+                      <DialogImage
+                        orderId={orderId}
+                        slipId={slip.id}
+                        slip={slip}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              </Paper>
             </Grid>
           </Grid>
           {/* <MediaControlCard /> */}
