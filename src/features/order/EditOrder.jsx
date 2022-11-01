@@ -165,7 +165,7 @@ const EditOrder = () => {
                     <Box
                       sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                     >
-                      <Section info={`[${index + 1}]`} mb={0} />
+                  
                       <PreviewImage url={slip.image.path} />
 
                       <Section
