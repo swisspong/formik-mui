@@ -7,7 +7,13 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
-const PreviewImage = ({ file, isLoading = false, url, deleteHandler }) => {
+const PreviewImage = ({
+  file,
+  isLoading = false,
+  url,
+  deleteHandler,
+  chipStatus = null,
+}) => {
   const [preview, setPreview] = useState(null);
   const reader = new FileReader();
 
@@ -27,6 +33,7 @@ const PreviewImage = ({ file, isLoading = false, url, deleteHandler }) => {
           position: "relative",
         }}
       >
+        {chipStatus && chipStatus}
         {isLoading && (
           <Backdrop open={true} sx={{ color: "#fff", position: "absolute" }}>
             <CircularProgress color="inherit" />

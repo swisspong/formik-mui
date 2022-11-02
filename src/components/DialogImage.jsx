@@ -1,4 +1,3 @@
-import * as React from "react";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
@@ -17,14 +16,20 @@ import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import FormVerifiedOrder from "../features/order/FormVerifiedOrder";
 import { useVerifiedSlipMutation } from "../features/order/orderApiSlice";
+import { useEffect, useState } from "react";
 
 export default function DialogImage({ orderId, slipId, slip }) {
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
-  const [fullWidth, setFullWidth] = React.useState(true);
-  const [maxWidth, setMaxWidth] = React.useState("sm");
+  const [open, setOpen] = useState(false);
+
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const [verifiedSlip] = useVerifiedSlipMutation();
+
+  const [formState, setFormState] = useState({
+    invalidSlip: slip?.invalidSlip || false,
+    referId: slip?.referId || "",
+    price: slip?.price || "",
+  });
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -33,26 +38,15 @@ export default function DialogImage({ orderId, slipId, slip }) {
     setOpen(false);
   };
 
-  const handleMaxWidthChange = (event) => {
-    setMaxWidth(
-      // @ts-expect-error autofill of arbitrary value is not handled.
-      event.target.value
-    );
-  };
-
-  const handleFullWidthChange = (event) => {
-    setFullWidth(event.target.checked);
-  };
-
   return (
-    <React.Fragment>
+    <>
       <Button variant="outlined" onClick={handleClickOpen}>
         {slip?.verified === true ? "Verified Slip" : "Verify Slip"}
       </Button>
       <Dialog
         fullScreen={fullScreen}
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
+        fullWidth={true}
+        maxWidth={"sm"}
         open={open}
         onClose={handleClose}
       >
@@ -67,59 +61,11 @@ export default function DialogImage({ orderId, slipId, slip }) {
           </Box>
         </DialogContent>
         <DialogActions>
-          {/* <Box
-            sx={{
-              width: "100%",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              gap: "10px",
-            }}
-          >
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Refer id"
-              variant="outlined"
-            />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Price"
-              variant="outlined"
-            />
-            <FormControl fullWidth>
-              <InputLabel id="demo-simple-select-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-             
-                label="Age"
-            
-              >
-                <MenuItem value={10}>Wrong Image</MenuItem>
-                <MenuItem value={20}>Invalid Price</MenuItem>
-              </Select>
-            </FormControl>
-            <Box sx={{ display: "flex", gap: "10px" }}>
-              <Button variant="contained" onClick={handleClose}>
-                Submit
-              </Button>
-              <Button variant="contained" color="error" onClick={handleClose}>
-                Close
-              </Button>
-            </Box>
-          </Box> */}
           <FormVerifiedOrder
-            initialValues={{
-              referId: slip?.referId || "",
-              price: slip?.price || "",
-              status: "",
-            }}
-            dropdownOptions={[
-              { key: "", value: "" },
-              { key: "Invalid Slip Image", value: "INVALID_SLIP" },
-            ]}
+            initialValues={formState}
+          
+            data={slip || null}
+            
             onSubmit={(values) => {
               console.log(values);
               verifiedSlip({ orderId, slipId, body: values });
@@ -129,6 +75,6 @@ export default function DialogImage({ orderId, slipId, slip }) {
           />
         </DialogActions>
       </Dialog>
-    </React.Fragment>
+    </>
   );
 }

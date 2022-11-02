@@ -5,6 +5,7 @@ import { useGetOrderByIdQuery } from "./orderApiSlice";
 import MediaControlCard from "../../components/CardProduct";
 import {
   Box,
+  Chip,
   FormControl,
   Grid,
   InputLabel,
@@ -165,12 +166,26 @@ const EditOrder = () => {
                     <Box
                       sx={{ display: "flex", flexDirection: "column", gap: 1 }}
                     >
-                  
-                      <PreviewImage url={slip.image.path} />
+                      <PreviewImage
+                        url={slip.image.path}
+                        chipStatus={
+                          <Chip
+                            label={"price"}
+                            color="warning"
+                            size="small"
+                            sx={{ position: "absolute", top: 5, right: 5 }}
+                          />
+                        }
+                      />
 
+                      <Section label={"message"} info={slip.message} mb={0} />
                       <Section
                         label={"Refer ID"}
-                        info={slip.referId || "please verified"}
+                        info={
+                          slip.verified && slip.referId === null
+                            ? "No refer Id"
+                            : slip.referId
+                        }
                         mb={0}
                       />
                       <Section
