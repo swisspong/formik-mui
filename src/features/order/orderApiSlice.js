@@ -58,6 +58,16 @@ export const extendApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [{ type: "Order", id: arg.id }],
     }),
+    updateOrderStatus: builder.mutation({
+      query: ({ orderId, body }) => ({
+        url: `order/${orderId}/status`,
+        method: "PUT",
+        body: {
+          ...body,
+        },
+      }),
+      invalidatesTags: (result, error, arg) => [{ type: "Order", id: arg.id }],
+    }),
 
     deleteOrder: builder.mutation({
       query: ({ id }) => ({
@@ -75,6 +85,7 @@ export const {
   useGetOrdersQuery,
   useVerifiedSlipMutation,
   useUpdateOrderMutation,
+  useUpdateOrderStatusMutation
 } = extendApiSlice;
 
 export const selectOrderResult = extendApiSlice.endpoints.getOrders.select();

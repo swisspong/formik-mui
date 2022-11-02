@@ -1,7 +1,10 @@
 import React from "react";
 import HeadingCrud from "../../components/HeadingCrud";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetOrderByIdQuery } from "./orderApiSlice";
+import {
+  useGetOrderByIdQuery,
+  useUpdateOrderStatusMutation,
+} from "./orderApiSlice";
 import MediaControlCard from "../../components/CardProduct";
 import {
   Box,
@@ -20,6 +23,9 @@ import OrderTableCollapse from "../../components/orderComp/OrderTableCollapse";
 import PreviewImage from "../../components/FormUi/PreviewImage";
 import DialogImage from "../../components/DialogImage";
 import StepperStatus from "../../components/StepperStatus";
+import VerticalLinearStepper from "./VerticalLinearStepper";
+import DotsMobileStepper from "./DotsMobileStepper";
+import FormSlipAdmin from "./FormSlipAdmin";
 
 // import {
 //   useGetCategoryByIdQuery,
@@ -89,7 +95,7 @@ const EditOrder = () => {
       {isSuccess && (
         <Paper sx={{ p: 2 }}>
           <StepperStatus />
-          <Grid container spacing={3}>
+          <Grid sx={{ mt: 1 }} container spacing={3}>
             <Grid item xs={12}>
               <OrderTableCollapse order={order} />
             </Grid>
@@ -122,37 +128,30 @@ const EditOrder = () => {
                     />
                   </Paper>
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <Paper sx={{ p: 2 }}>
-                    <Section
-                      label={"Payment Method"}
-                      info={
-                        order?.paymentMethod === "SLIP" ? "Attach Slip" : ""
-                      }
-                    />
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        gap: 2,
-                        mx: 1,
-                        my: 2,
-                      }}
-                    >
-                      <PreviewImage
-                        url={
-                          "https://f.ptcdn.info/762/058/000/pc91rhf9olTmLDj35rR-s.jpg"
-                        }
-                      />
-
-                      <DialogImage />
-                    </Box>
-                  </Paper>
-                </Grid> */}
               </Grid>
             </Grid>
-            <Grid item xs={9}>
+            <Grid item xs={3}>
+              <Paper sx={{ p: 2 }}>
+                <VerticalLinearStepper
+                  orderId={orderId}
+                  stepCount={
+                    order.status === "PENDING"
+                      ? 0
+                      : order.status === "AUTHORIZE"
+                      ? 1
+                      : order.status === "PAID" ||
+                        order.status === "INVALID_SLIP"
+                      ? 1
+                      : order.status === "PACKING"
+                      ? 2
+                      : order.status === "DELIVERED"
+                      ? 3
+                      : 0
+                  }
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
               <Paper sx={{ p: 2 }}>
                 <Box
                   sx={{
@@ -170,8 +169,8 @@ const EditOrder = () => {
                         url={slip.image.path}
                         chipStatus={
                           <Chip
-                            label={"price"}
-                            color="warning"
+                            label={slip.verified ? "Verified" : "Not Verify"}
+                            color={slip.verified ? "success" : "warning"}
                             size="small"
                             sx={{ position: "absolute", top: 5, right: 5 }}
                           />
@@ -201,6 +200,61 @@ const EditOrder = () => {
                     </Box>
                   ))}
                 </Box>
+                {/* <DotsMobileStepper/> */}
+              </Paper>
+            </Grid>
+            <Grid item xs={6}>
+              <Paper sx={{ p: 2 }}>
+                <Typography mb={1}>Slip to customer</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 2,
+                    mx: 1,
+                  }}
+                >
+                  {/* {order?.slip.map((slip, index) => (
+                    <Box
+                      sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                    >
+                      <PreviewImage
+                        url={slip.image.path}
+                        chipStatus={
+                          <Chip
+                            label={slip.verified ? "Verified" : "Not Verify"}
+                            color={slip.verified ? "success" : "warning"}
+                            size="small"
+                            sx={{ position: "absolute", top: 5, right: 5 }}
+                          />
+                        }
+                      />
+
+                      <Section label={"message"} info={slip.message} mb={0} />
+                      <Section
+                        label={"Refer ID"}
+                        info={
+                          slip.verified && slip.referId === null
+                            ? "No refer Id"
+                            : slip.referId
+                        }
+                        mb={0}
+                      />
+                      <Section
+                        label={"Price"}
+                        info={slip.price || "please verifeid"}
+                        mb={0}
+                      />
+                      <DialogImage
+                        orderId={orderId}
+                        slipId={slip.id}
+                        slip={slip}
+                      />
+                    </Box>
+                  ))} */}
+                  <FormSlipAdmin initialValues={{ asset: "" }} />
+                </Box>
+                {/* <DotsMobileStepper/> */}
               </Paper>
             </Grid>
           </Grid>
